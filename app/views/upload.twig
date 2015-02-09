@@ -1,0 +1,94 @@
+{% extends "basehtml.twig" %}
+
+
+{% block head %}
+    {{ parent() }}
+    <script src="public/assets/js/spin.min.js"></script>
+    <script>
+        function applySpinner(){
+            var opts = {
+                lines: 15, // The number of lines to draw
+                length: 20, // The length of each line
+                width: 10, // The line thickness
+                radius: 28, // The radius of the inner circle
+                corners: 1, // Corner roundness (0..1)
+                rotate: 0, // The rotation offset
+                direction: 1, // 1: clockwise, -1: counterclockwise
+                color: '#000', // #rgb or #rrggbb or array of colors
+                speed: 0.8, // Rounds per second
+                trail: 63, // Afterglow percentage
+                shadow: false, // Whether to render a shadow
+                hwaccel: false, // Whether to use hardware acceleration
+                className: 'spinner', // The CSS class to assign to the spinner
+                zIndex: 2e9, // The z-index (defaults to 2000000000)
+                top: '50%', // Top position relative to parent
+                left: '50%' // Left position relative to parent
+            };
+            var target = document.getElementById('progress');
+            var spinner = new Spinner(opts).spin(target);
+        }
+
+    </script>
+
+{% endblock %}
+
+{% block main %}
+
+    <div = "container" style="margin-top:200px">
+    <div class="row">
+        <div class="col-md-4" style="width:20%"></div>
+        <div class="col-md-4" style="text-align:center; width:60%">
+            <div id="wrapper">
+                <div id="form">
+                    <form enctype="multipart/form-data" action="/demographicsDB/readExcel" method="post">
+                        <input type="hidden" name="table" id="table" value="{{table}}"/>
+                        <label for="file">Select excel file:</label></br>
+                        <span id = "pickFile" class="btn btn-primary btn-file">
+                        Choose<input type="file" name="file" id="file" onchange="$('#wrapper').hide();$('#waitMessage').show();applySpinner();this.form.submit()" style="margin:0 auto;"><br>
+                        </span>
+                        </br>
+                        <!--<button class="btn" type="submit" name="submitBtn" id="submitBtn" value="Submit">submit</button>-->
+                    </form>
+                </div>
+
+                </br>
+                <span style="color:#B6B6B4">Please use the provided Excel Template</a>. Do not change the sheet name "data":</span>
+                <p><a href="public/assets/demographics_patient.xlsx">Individuals Template</a></p>
+            </div>
+            <div id="progress"></div>
+
+            <div id="waitMessage" style="display:none; margin-top: 150px">Please Wait While We Upload Your File</div>
+        </div>
+
+        <div class="col-md-4" style="width:20%"></div>
+    </div>
+
+
+    </div>
+
+    </br>
+    </br>
+    </br>
+    </br>
+    <!--<h5> Browswer minimum requirements: IE 10+, Firefox 4.0+, Chrome 7+, Safari 5+, Opera 12+</h5>-->
+
+    <div class="modal fade" id="SubmissionsuccessModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" onclick="redirect('isolates')"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Submit File</h4>
+                </div>
+                <div class="modal-body">
+                    Data submitted successfully.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="redirect('isolates')">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

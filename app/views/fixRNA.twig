@@ -1,0 +1,150 @@
+{% extends "basehtml.twig" %}
+
+{% block head %}
+    {{ parent() }}
+
+    <style>
+        td{
+            min-width: 200px;
+            max-width: 400px !important;
+        }
+    </style>
+{% endblock %}
+
+
+{% block main %}
+
+
+    <div id="message">
+
+        {{ flash['success'] |raw }}
+    </div>
+
+
+    <!--<div style="text-align:center; background-color: #f0ad4e; color:#000000; max-width: 50%; margin: 0 auto; margin-top:5px">{{ flash['success'] |raw }}</div></br>-->
+
+    <table class="table table-hover" style="margin-top:5px">
+        <thead><tr>
+
+            {% for key,val in data[1]|slice(0) %}
+
+                <th>{{ key }}</th>
+            {% endfor %}
+        </tr></thead>
+
+        <form action="revalidate" method="post">
+
+            {% set c1=0 %}
+            {% set c2=0 %}
+            {% for item in data|slice(0) %}
+                {% set c1=loop.index %}
+                <tr>
+                    {% for key,val in item %}
+                        {% set flag=0 %}
+                        {% set addToDB=0 %}
+                        {% set sampleIdInDB=0 %}
+                        {% set c2=loop.index %}
+                        {% set id1= [c1, c2]|join("_") %}
+                        {% set id2 = "%s_%s"|format(c1, c2) %}
+
+
+                        {% if val[0]|length>0 %}{%  set valu=val[0]%} {% else %} {% set valu="-" %} {% endif %}
+
+
+
+                        {%  if val[1]["required"]=="required field" %} {%  set valu="required"%} {% set flag=1 %} {% endif %}
+
+
+                        {% if (val[0]|length>0 and val[1]["between"] and val[1]["between"] is not same as(1)) %} {% set valu = val[1]["between"] %} {% set flag=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["in"] and val[1]["in"] is not same as(1)) %} {% set valu = val[1]["in"] %} {% set flag=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["notin"] and val[1]["notin"] is not same as(1)) %} {% set valu = val[1]["notin"] %} {% set flag=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["unique"] and val[1]["unique"] is not same as(1)) %} {% set valu = val[1]["unique"] %} {% set flag=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["numeric"] and val[1]["numeric"] is not same as(1)) %} {% set valu = val[1]["numeric"] %} {% set flag=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["status"] and val[1]["status"] is not same as(1)) %} {% set valu = val[1]["status"] %} {% set flag=1 %}{% set status=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["type"] and val[1]["type"] is not same as(1)) %} {% set valu = val[1]["type"] %} {% set flag=1 %}{% set type=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["bool"] and val[1]["bool"] is not same as(1)) %} {% set valu = val[1]["bool"] %} {% set flag=1 %}{% set bool=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["costSite"] and val[1]["costSite"] is not same as(1)) %} {% set valu = val[1]["costSite"] %} {% set flag=1 %}{% set costSite=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["LatLon"] and val[1]["LatLon"] is not same as(1)) %} {% set valu = val[1]["LatLon"] %} {% set flag=1 %}{% set costSite=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["project"] and val[1]["project"] is not same as(1)) %} {% set valu = val[1]["project"] %} {% set flag=1 %}{% set costSite=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["receiver"] and val[1]["receiver"] is not same as(1)) %} {% set valu = val[1]["receiver"] %} {% set flag=1 %}{% set costSite=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["gender"] and val[1]["gender"] is not same as(1)) %} {% set valu = val[1]["gender"] %} {% set flag=1 %}{% set costSite=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["intExt"] and val[1]["intExt"] is not same as(1)) %} {% set valu = val[1]["intExt"] %} {% set flag=1 %}{% set costSite=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["cyrilic"] and val[1]["cyrilic"] is not same as(1)) %} {% set valu = val[1]["cyrilic"] %} {% set flag=1 %}{% set costSite=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["clinician"] and val[1]["clinician"] is not same as(1)) %} {% set valu = val[1]["clinician"] %} {% set flag=1 %}{% set costSite=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["institute"] and val[1]["institute"] is not same as(1)) %} {% set valu = val[1]["institute"] %} {% set flag=1 %}{% set costSite=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["country"] and val[1]["country"] is not same as(1)) %} {% set valu = val[1]["country"] %} {% set flag=1 %}{% set costSite=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["in"] and val[1]["in"] is not same as(1)) %} {% set valu = val[1]["in"] %} {% set flag=1 %}{% endif %}
+
+                        <td>
+
+                            {% if flag==1 %}
+                                {% if addToDB==1 and c2!=6%}
+                                    <select id="{{ id2 }}" class='fix db' style="width:80%; min-width:80px;" name={{ id2 }}  onchange="validate('{{ id1 }}')" data-toggle="tooltip" data-placement="top" title= "{{valu}}">
+                                        <option value="{{ val[0] }}" selected="selected"> {{ val[0]}}</option>
+                                        {% for item in auxiliary[ val[1]["in"]|split("(")[1]|slice(0,-1)] %}
+                                            <option value="{{ item['Name'] }}">{{ item['Name'] }}</option>
+                                        {% endfor %}
+
+                                    </select>&nbsp;&nbsp;
+                                    <i class="fa fa-database fa-1 dbicon" id = "{{ id2 }}" style="color:#f00" data-toggle="popover" data-content="Value not found in the database. It might be misspelled. Please check the options bellow. If necessary, click submit to add it. </br><button class='btn btn-warning addtodatabase' onclick='addtodatabase({{ [c1, c2]|join(",") }})'>submit</button>" data-placement="right" title= "{{valu}} <button type='button' class='close' data-dismiss='modal' onclick='closePopover(&quot;{{ id1 }}&quot;)'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>"></i>
+
+                                {% else %}
+
+                                    {% if c2=="30"  %}
+                                        <select id="{{ id2 }}" class='fix notdb' style="width:80%; min-width:80px;" name={{ id2 }}  onchange="validate('{{ id1 }}', 'rna')" data-toggle="tooltip" data-placement="left" title="{{valu}}">
+                                        <option value="{{ val[0] }}" selected="selected"> {{ val[0]}}</option>
+                                        <option value="Qbit">Qbit</option>
+                                        <option value="Nanodrop"> Nanodrop</option>
+                                        <option value="Spec"> Spec</option>
+                                        </select>
+
+
+                                    {% elseif c2=="31" %}
+                                        <select id="{{ id2 }}" class='fix notdb' style="width:80%; min-width:80px;" name={{ id2 }}  onchange="validate('{{ id1 }}', 'rna')" data-toggle="tooltip" data-placement="left" title="{{valu}}">
+                                        <option value="{{ val[0] }}" selected="selected"> {{ val[0]}}</option>
+                                        <option value="YES">yes</option>
+                                        <option value="NO"> no</option>
+                                        </select>
+
+
+                                    {% elseif c2=="32" %}
+                                        <select id="{{ id2 }}" class='fix notdb' style="width:80%; min-width:80px;" name={{ id2 }}  onchange="validate('{{ id1 }}', 'rna')" data-toggle="tooltip" data-placement="left" title="{{valu}}">
+                                        <option value="{{ val[0] }}" selected="selected"> {{ val[0]}}</option>
+                                        <option value="CRIP">CRIP</option>
+                                        <option value="Invoice"> Invoice</option>
+                                        </select>
+
+                                    {% else %}
+                                        <input type="text" id="{{ id2 }}" class='fix notdb btn' name = {{ id2 }} onblur="validate('{{ id1 }}', 'rna')" value='{{val[0]}}' data-toggle="tooltip" data-placement="left" title="{{valu}}" >
+                                    {%  endif %}
+                                {% endif %}
+
+                            {% else %}
+                                <input type="text" id="{{ id2 }}" class="btn" name = {{ id2 }}  value='{{ val[0] }}' style="text-align:left" readonly="readonly">
+                            {% endif %}
+
+
+
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            <script>
+                rows={{ c1 }};
+            </script>
+
+    </table>
+
+    <input type="hidden" name="table" value="rna"/>
+    <input name="btn submit" id="submitbutton" class="btn btn-default" type="submit" style="margin:0 0 0 10px" value="Submit" disabled/>
+    </form>
+
+
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+
+    <script src="public/assets/js/fixExcel.js"></script>
+{% endblock %}
+

@@ -1,0 +1,81 @@
+<html>
+<head>
+    <title>CRIPDB</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <link href="public/assets/css/style.css" rel="stylesheet">
+
+</head>
+
+
+<body>
+
+
+
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation" >
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#"><b>CripDB</b></a>
+        </div>
+
+        <img src="public/assets/images/MSMC_KO_Hrztl.png" class="pull-right visible-lg visible-md" style="margin:0px; padding-top:5px; height:40px;">
+    </div>
+    </div>
+</nav>
+
+
+
+<div id="container" style="margin-top:200px">
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4" style="text-align:center">
+        <div class="modal-body">
+
+            <form class="form-signin" name="register" role="form" action="/demographicsDB/register" method="post" _lpchecked="1">
+                <h2 class="form-signin-heading"></h2>
+                <fieldset>
+                    <legend>Register:</legend>
+
+
+                        <input name="user" type="text" class="form-control"  value="username" style="color:#ccc;" onfocus="this.value = this.value=='username' ? '' : this.value; this.style.color='#000';" onfocusout="this.value = this.value == '' ? this.value = 'username' : this.value; this.value=='username' ? this.style.color='#ccc' : this.style.color='#000'"/>
+                        <input name="name" type="text" class="form-control"  value="name" style="color:#ccc;" onfocus="this.value = this.value=='name' ? '' : this.value; this.style.color='#000';" onfocusout="this.value = this.value == '' ? this.value = 'name' : this.value; this.value=='name' ? this.style.color='#ccc' : this.style.color='#000'"/>
+
+                        <input name="email" type="email" class="form-control" style="color:#ccc;" value="email" onfocus="this.value = this.value=='email' ? '' : this.value; this.style.color='#000';" onfocusout="this.value = this.value == '' ? this.value = 'email' : this.value; this.value=='email' ? this.style.color='#ccc' : this.style.color='#000'"/>
+
+
+
+                        <input name="pass" type="password" class="form-control" style="color:#ccc;" value="password" onfocus="this.value = this.value=='password' ? '' : this.value; this.style.color='#000';" onfocusout="this.value = this.value == '' ? this.value = 'password' : this.value; this.value=='password' ? this.style.color='#ccc' : this.style.color='#000'"/>
+                        <input name="pass2" type="password" class="form-control" style="color:#ccc;" value="password" onfocus="this.value = this.value=='password' ? '' : this.value; this.style.color='#000';" onfocusout="this.value = this.value == '' ? this.value = 'password' : this.value; this.value=='password' ? this.style.color='#ccc' : this.style.color='#000'"/>
+
+
+                        <button class="btn btn-lg btn-primary btn-block" id="submit" name="submit" type="submit">Register</button>
+
+
+                </fieldset>
+
+
+
+            </form>
+
+        </div>
+
+    </div>
+    <div class="col-md-4"></div>
+</div>
+</div>
+
+
+</body>
+</html>
+
+
+
+

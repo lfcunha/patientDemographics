@@ -1,0 +1,139 @@
+{% extends "basehtml.twig" %}
+
+{% block head %}
+    {{ parent() }}
+
+
+    <script id="individualsTable-template" type="text/x-handlebars-template">
+        {% verbatim %}
+        <td id={{id}}                   name="id" >{{id}}</td>
+        <td id={{id}}                   name="individualID" >{{individualID}}</td>
+        <td id={{id}}                   name="celllineId" >{{celllineId}}</td>
+        <td id={{id}}                   name="arrivalSource">{{arrivalSource}}</td>
+        <td id={{id}} class="crosshair" name="biologicalSource">{{biologicalSource}}</td>
+        <td id={{id}} class="crosshair" name="concentration" >{{concentration}}</td>
+        <td id={{id}} class="crosshair" name="volume">{{volume}}</td>
+        <td id={{id}} class="crosshair" name="location">{{location}}</td>
+        <td id={{id}} class="crosshair" name="date" >{{date}}</td>
+        <td id={{id}} class="crosshair" name="notes" >{{notes}}</td>
+        <td id={{id}} class="crosshair" name="status" >{{status}}</td>
+        <td id={{id}} class="crosshair" name="created" >{{created}}</td>
+        {% endverbatim %}
+    </script>
+
+
+{% endblock %}
+
+
+
+{% block main %}
+    <div class="container" style="width:100%">
+        <div class="row" style="width:100%">
+            <div class="col-md-4" style="width:5%"></div>
+            <div class="col-md-4" style="width:90%">
+
+                <div style="text-align:center; background-color: #00ff00; color:#000066">{{ flash['success'] }}</div></br>
+
+                <div id="isolatesTable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+                    {% if data['data'][0]|length >0 %}
+                        <div class="col-xs-6">
+                            <div class="dataTables_length" id="tableLength">
+                                <label>Show
+                                    <select name="tableLength" id="tableLength" aria-controls="isolatesTable" class="form-control input-sm">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select> entries
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div id="dataTables_filter" class="dataTables_filter">
+                                <label>Quick Search:<input type="search" role="search" id="quickSearch" class="form-control input-sm" placeholder="" aria-controls="isolatesTable" ><i class="fa fa-search fa-3" id="faAvancedSearch"></i>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12" id="table" style="margin:0px;"> <!--Luis-->
+
+                            <table id="individualsTable" class="table table-hover dataTable table-bordered tablesorter" cellspacing="0"  style="margin-top:5px;width:100%">
+                                <thead>
+                                <tr>
+                                    <th class="sorting" name="id" >id</th>
+                                    <th class="sorting" name="individualID" >individualID</th>
+                                    <th class="sorting" name="celllineId" >celllineId</th>
+                                    <th class="sorting" name="arrivalSource" >Arrival Source</th>
+                                    <th class="sorting" name="biologicalSource">Biological Source</th>
+                                    <th class="sorting" name="concentration" >Concentration</th>
+                                    <th class="sorting" name="volume">Volume</th>
+                                    <th class="sorting" name="location">Location</th>
+                                    <th class="sorting" name="date" >Date</th>
+                                    <th class="sorting" name="notes">Notes</th>
+                                    <th class="sorting" name="status">Status</th>
+                                    <th class="sorting" name="created">created</th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <th class="sorting" name="id" >id</th>
+                                    <th class="sorting" name="individualID" >individualID</th>
+                                    <th class="sorting" name="celllineId" >celllineId</th>
+                                    <th name="arrivalSource" >Arrival Source</th>
+                                    <th name="biologicalSource">Biological Source</th>
+                                    <th name="concentration" >Concentration</th>
+                                    <th name="volume">Volume</th>
+                                    <th name="location">Location</th>
+                                    <th name="date" >Date</th>
+                                    <th name="notes">Notes</th>
+                                    <th name="status">Status</th>
+                                    <th name="created">created</th>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                {% for item in data['data']|slice(0) %}
+                                    <tr>
+                                        {% for value in item  | slice(0, ((item|length)-1)) %}
+                                            <td> {{ value }} </td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div> <!--table-->
+                        <!--<button type="button" class="btn btn-primary" style="float:right" onClick="window.location.replace(&quot;/isolatesFull&quot;)">Show all data fields</button>-->
+
+                    {% else %}
+                        <div style="text-align: center">You Haven't submitted any isolates yet.</div>
+                    {% endif %}
+                </div> <!--wrapper-->
+                <div class="col-xs-12 paginationWrapper" style="padding-left:15px">
+                    <!--javascript will set pagination here -->
+                    <ul class="pagination" id="pagination" style="margin:5px; float:left; font-size:12px">
+                    </ul>
+                    <ul class="export" style="margin:0px; float:left; margin-top: 7px; padding-left: 15px;">
+                        <form action="exportIsolates" method="post">
+                            <input type="hidden" id="submitExportSampleIds" name="sampleIds_" value="" />
+                            <span><button style="margin-right:10px; color:#428bca; margin-top:-1px" class="btn btn-sm btn-default" />Export</span>
+                        </form>
+                    </ul>
+                </div>
+            </div> <!--md-4 90%-->
+            <div class="col-md-4" style="width:5%"></div>
+        </div> <!--row-->
+    </div> <!--container-->
+
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+
+    <script src="public/assets/js/pagination.js"></script>
+    <script src="public/assets/js/dna.js"></script>
+
+{% endblock %}

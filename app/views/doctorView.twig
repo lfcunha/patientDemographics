@@ -1,0 +1,139 @@
+{% extends "basehtml.twig" %}
+
+{% block head %}
+    {{ parent() }}
+
+
+    <script id="individualsTable-template" type="text/x-handlebars-template">
+        {% verbatim %}
+        <td id={{id}}                   name="id" >{{id}}</td>
+        <td id={{id}} class="crosshair" name="firstName" >{{firstName}}</td>
+        <td id={{id}} class="crosshair" name="lastName" >{{lastName}}</td>
+        <td id={{id}} class="crosshair" name="office">{{office}}</td>
+        <td id={{id}} class="crosshair" name="institution">{{institution}}</td>
+        <td id={{id}} class="crosshair" name="city" >{{city}}</td>
+        <td id={{id}} class="crosshair" name="country">{{country}}</td>
+        <td id={{id}}                   name="created" >{{created}}</td>
+        <td id={{id}}                   name="modified">{{modified}}</td>
+
+
+        {% endverbatim %}
+    </script>
+
+
+{% endblock %}
+
+
+
+{% block main %}
+    <div class="container" style="width:100%">
+        <div class="row" style="width:100%">
+            <div class="col-md-4" style="width:5%"></div>
+            <div class="col-md-4" style="width:90%">
+
+                <div style="text-align:center; background-color: #00ff00; color:#000066">{{ flash['success'] }}</div></br>
+
+                <div id="Table_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+                        <div class="col-xs-6">
+                            <div class="dataTables_length" id="tableLength">
+                                <label>Show
+                                    <select name="tableLength" id="tableLength" aria-controls="isolatesTable" class="form-control input-sm">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select> entries
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div id="dataTables_filter" class="dataTables_filter">
+                                <label>Quick Search:<input type="search" role="search" id="quickSearch" class="form-control input-sm" placeholder="" aria-controls="isolatesTable" ><i class="fa fa-search fa-3" id="faAvancedSearch"></i>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12" id="table" style="margin:0px;"> <!--Luis-->
+                            <form action='doctor' method='post'>
+                            <table id="doctorsTable" class="table table-hover dataTable table-bordered tablesorter" cellspacing="0"  style="margin-top:5px;width:100%">
+                                <thead>
+                                <tr>
+                                    <th class="sorting" name="id" >id</th>
+                                    <th class="sorting" name="firstName" >First Name</th>
+                                    <th class="sorting" name="lastName" >Last Name</th>
+                                    <th class="sorting" name="office">Office</th>
+                                    <th class="sorting" name="institution">Institution</th>
+                                    <th class="sorting" name="city" >City</th>
+                                    <th class="sorting" name="country">Country</th>
+                                    <!--<th class="sorting" name="created" >Created</th>
+                                    <th class="sorting" name="modified">Modified</th>-->
+
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <th class="sorting" name="id" >id</th>
+                                    <th class="sorting" name="firstName" >First Name</th>
+                                    <th class="sorting" name="lastName" >Last Name</th>
+                                    <th class="sorting" name="office">Office</th>
+                                    <th class="sorting" name="institution">Institution</th>
+                                    <th class="sorting" name="city" >City</th>
+                                    <th class="sorting" name="country">Country</th>
+                                    <!--<th class="sorting" name="created" >Created</th>
+                                    <th class="sorting" name="modified">Modified</th>-->
+                                </tr>
+                                </tfoot>
+                                <tbody>
+
+                                {% for item in data['data'] %}
+                                    <tr>
+                                        {% for value in item | slice(0, (item|length)-2) %}
+                                             <td> {{ value }} </td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                            </form>
+                        </div> <!--table-->
+                        <!--<button type="button" class="btn btn-primary" style="float:right" onClick="window.location.replace(&quot;/isolatesFull&quot;)">Show all data fields</button>-->
+
+
+                </div> <!--wrapper-->
+                <div class="col-xs-12 paginationWrapper" style="padding-left:15px">
+                    <!--javascript will set pagination here -->
+                    <ul class="pagination" id="pagination" style="margin:5px; float:left; font-size:12px">
+                    </ul>
+                    <ul class="export" style="margin:0px; float:left; margin-top: 7px; padding-left: 15px;">
+                        <div>
+                            <div style="float:left">
+                                <form action="exportIsolates" method="post">
+                                    <input type="hidden" id="submitExportSampleIds" name="sampleIds_" value="" />
+                                    <span><button style="margin-right:10px; color:#428bca; margin-top:-1px" id="ExportIsolatesButton" class="btn btn-sm btn-default" />Export all</span>
+                                </form>
+                            </div>
+                            <div style="float:right">
+                                    <span><button style="color:#428bca;  margin-top:-1px" id = "addDoctor" name="addDoctor" class="btn btn-sm btn-default" onclick="addDoctorRow()" />Add doctor</span>
+                                    <span><button type="submit" style=" display:none; color:#428bca;  margin-top:-1px" id ="submitDoctor" name="submitDoctor" class="btn btn-sm btn-default" onclick = "submitForm()" />Submit</span>
+
+                            </div>
+                        </div>
+                    </ul>
+                </div>
+            </div> <!--md-4 90%-->
+            <div class="col-md-4" style="width:5%"></div>
+        </div> <!--row-->
+    </div> <!--container-->
+
+
+
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+
+    <script src="public/assets/js/pagination.js"></script>
+    <script src="public/assets/js/doctor.js"></script>
+{% endblock %}
