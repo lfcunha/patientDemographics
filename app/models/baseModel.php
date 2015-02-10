@@ -80,7 +80,6 @@ class baseModel{
     protected function saveToDB_($data){
         $data_=$data["data"];
         $table=$data["table"];
-
         for($i=0; $i<count($data_); $i++) {
                 $query="INSERT INTO `".$table."` (";
                 foreach ($this->tableColumns[$table] as $key) {
@@ -89,12 +88,14 @@ class baseModel{
                     $query .= "`,";
                 }
                 $query = rtrim($query, ",");
-                $query .=") VALUES (";
-                foreach (array_slice($this->tableColumns[$data["table"]],0,count($this->tableColumns[$data["table"]])-2) as $key) {
+
+                $query .=") VALUES ('',";
+                foreach (array_slice($this->tableColumns[$table],1,count($this->tableColumns[$data["table"]])-3) as $key) {
                     $query.="'";
                     $query.= $data_[$i][$key];
                     $query.= "',";
-                }
+                };
+
                 $query.="NOW(),NOW())";
 
                 try {
@@ -107,7 +108,7 @@ class baseModel{
                     return array(2, $e->getMessage());
                 }
         }
-        return array(1);
+        return 1;
     }
 
 
@@ -134,6 +135,7 @@ class baseModel{
 
     protected function search_($table, $length, $offset, $search, $column, $order){
         $query="";
+        if ($table=="patients") $table="patient";
         foreach ($this->tableColumns[$table] as $key) {
             $query.="`";
             $query.=$key;
@@ -141,6 +143,7 @@ class baseModel{
             $query .= $search;
             $query .= "' OR ";
         };
+
         $query = rtrim($query, " OR ");
         $query_="select * from ".$table." WHERE ( ".$query."   )  ORDER BY `". $column ."` ". $order ." LIMIT ". $length ." OFFSET " . $offset ;
         $queryCount = "SELECT count(*) FROM `".$table."` WHERE  ( ".$query."   ) ";
@@ -157,12 +160,14 @@ class baseModel{
             array_push($result['data'], $row);
             $i++;
         }
+
         $result['query']=$sth;
         $result['count']=$count;
         $result['size']=$length;
         $result['total']=$this->totalRecords($table);
         $result['offset']=$offset;
         $result['queryCount']=$sthCount;
+        //return $query_;
         return $result;
         }
 

@@ -12,7 +12,14 @@ class doctorController extends baseController {
 
 
     public function getDoctor($column, $order, $offset, $length, $ajax){
-        return $this->getData($column, $order, $offset, $length, $ajax, $this->model, $this->view);
+        $data = $this->getData($column, $order, $offset, $length, $this->model);
+        if($ajax == 1 || $ajax == "1"){
+            return json_encode($data);
+        }
+        else {
+            $this->app->render($this->view, array("data"=>$data));
+        }
+
     }
 
     public function fetchDoctor($column, $order, $offset, $length){

@@ -195,9 +195,10 @@ function setPaginationNavigation(){
     $.ajax({
         type: 'get',
         url: url,
-        data: {length:10, offset:0, column:"idIsolates", order:"sorting_desc".split("_")[1], "ajax":1},
+        data: {length:10, offset:0, column:"id", order:"sorting_desc".split("_")[1], "ajax":1},
         //data: {id:"1"},
         beforeSend: function(){
+            console.log("paginationJS 201");
         },
         success: function (response) {
             //console.log("a: " + response);
@@ -377,13 +378,14 @@ function getRepaginationData(elem){
         data: {length:tableLength, offset:offset,column: column, order:order.split("_")[1], ajax:1},
         //data: {id:"1"},
         beforeSend: function(){
+            console.log("searching:");
         },
         success: function (response) {
-            var data=JSON.parse(response);
-            console.log("repaginating");
-            $(".showingPagesInfo").remove();
-            preparePagination(data.count, data.size);
-            tbodyTemplate(data);
+            var data__ = JSON.parse(response);
+            console.log(data__);
+            //$(".showingPagesInfo").remove();
+            //preparePagination(data.count, data.size);
+            //tbodyTemplate(data);
         },
         error: function() {
             console.error("error");
@@ -450,10 +452,10 @@ function quickSearch(offset,source){
         data: {table: _.last(document.URL.split("/")), length:tableLength, offset:offset, search:searchTerm, column: column, order:order.split("_")[1]},
         //data: {id:"1"},
         beforeSend: function(){
-            //console.log({length:tableLength, offset:offset, search:searchTerm, column: column, order:order});
+            console.log({length:tableLength, offset:offset, search:searchTerm, column: column, order:order.split("_")[1]});
         },
         success: function (response) {
-            //console.log(response);
+            console.log(response);
             var data=JSON.parse(response);
             if (!source) {
                 $(".showingPagesInfo").remove()

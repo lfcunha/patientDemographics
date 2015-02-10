@@ -5,7 +5,7 @@ use \individuals;
 #ini_set('memory_limit', '512M');
 //include_once "./app/controllers/doctorController.php";
 
-ChromePhp::log("Chrome logger is working");
+ChromePhp::log("");
 
 
 $authenticate = function ($app) {
@@ -196,14 +196,12 @@ $app->post('/readExcel', $authenticate($app), function()  use ($app) {
 
 
 $app->get('/patients',  $authenticate($app), function()  use ($app){
-    ChromePhp::log("getPatients0");
     $c      = new patientController();
     $ajax   = $app->request()->get('ajax')?$app->request()->get('ajax'):0;
     $length = $app->request()->get('length')?$app->request()->get('length'):10;
     $offset = $app->request()->get('offset')?$app->request()->get('offset'):0;
     $column = $app->request()->get('column')?$app->request()->get('column'):"id";
     $order  = $app->request()->get('order')? $app->request()->get('order'):"asc";
-    ChromePhp::log("getPatients0: " . $ajax . " " . $length . " " . $offset . " " . $column . " " . $order );
     $data   =  $c->getPatients($column, $order, $offset, $length, $ajax);
     echo $data;
 
@@ -290,6 +288,13 @@ $app->get('/addfamily', $authenticate($app),  function()  use ($app){
     $app->render('addFamily.twig', array("table"=>"RNA"));
 });
 $app->post('/family', $authenticate($app),  function()  use ($app){
+    $req=$app->request();
+    $doctorId=$req->post("doctorId");
+    $c= new familyController();
+    $result=$c->addFamily(array(array("doctorId"=>$doctorId)));
+    echo json_encode($result);
+
+
 });
 $app->put('/family', $authenticate($app),  function()  use ($app){
 });
@@ -385,7 +390,7 @@ $app->post('/revalidate', $authenticate($app), function()use ($app){
 $app->post('/search', $authenticate($app), function()  use ($app){
     $req = $app->request();
     $postdata=$req->post();
-    $table =$postdata["table"];
+    $table = str_replace("#","",$postdata["table"]);
     $length=$postdata["length"];
     $offset=$postdata["offset"];
     $search=$postdata["search"];
@@ -396,7 +401,7 @@ $app->post('/search', $authenticate($app), function()  use ($app){
 //    $req = $app->request();
 //    $log = $app->log;
 //    $log->info($_SESSION['user'] . " - " . $req->getIp() . " - Search Isolates: " . implode(",", $postdata));
-
+    //ChromePhp::log($table . " / " . $length . " / " . $offset . " / " . $search . " / " . $column . " / " . $order[0]);
     $c=new baseController();
     $result=$c->search($table, $length, $offset, $search, $column, $order);
     //var_dump($result);

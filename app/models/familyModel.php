@@ -33,4 +33,9 @@ class familyModel extends \baseModel {
     public function search($table, $length, $offset, $search, $column, $order){
         return $this->search_($table, $length, $offset, $search, $column, $order);
     }
+
+    public function name(){
+        return "familyModel";
+    }
+
 }

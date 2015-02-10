@@ -7,11 +7,18 @@ class familyController extends baseController {
     public function __construct() {
         parent::__construct();
         $this->model="familyModel";
+        $this->view = "familyView.twig";
     }
 
 
     public function getFamily($column, $order, $offset, $length, $ajax){
-        return $this->getData($column, $order, $offset, $length, $ajax, $this->model, "familyView.twig");
+        $data = $this->getData($column, $order, $offset, $length, $this->model);
+        if($ajax == 1 || $ajax == "1"){
+            return json_encode($data);
+        }
+        else {
+            $this->app->render($this->view, array("data"=>$data));
+        }
     }
 
     public function fetchFamily($column, $order, $offset, $length){
@@ -22,8 +29,8 @@ class familyController extends baseController {
 
     }
 
-    public function addFamily(){
-
+    public function addFamily($data){
+        return $this->saveData($data, 1, $this->model, $this->view);
     }
 
     public function editFamily($data){

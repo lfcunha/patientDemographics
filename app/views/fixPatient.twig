@@ -32,6 +32,7 @@
             </tr>
         </thead>
 
+
         <form action="revalidate" method="post">
 
             {% set c1=0 %}
@@ -69,6 +70,7 @@
                         {% if (val[0]|length>0 and val[1]["clinician"] and val[1]["clinician"] is not same as(1)) %} {% set valu = val[1]["clinician"] %} {% set flag=1 %}{% set costSite=1 %}{% endif %}
                         {% if (val[0]|length>0 and val[1]["institute"] and val[1]["institute"] is not same as(1)) %} {% set valu = val[1]["institute"] %} {% set flag=1 %}{% set costSite=1 %}{% endif %}
                         {% if (val[0]|length>0 and val[1]["country"] and val[1]["country"] is not same as(1)) %} {% set valu = val[1]["country"] %} {% set flag=1 %}{% set costSite=1 %}{% endif %}
+                        {% if (val[0]|length>0 and val[1]["relationship"] and val[1]["relationship"] is not same as(1)) %} {% set valu = val[1]["relationship"] %} {% set flag=1 %}{% endif %}
 
 
                         <td>

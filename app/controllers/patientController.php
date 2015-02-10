@@ -12,7 +12,7 @@ class patientController extends baseController {
 
 
     public function getPatients($column, $order, $offset, $length, $ajax){
-        $data = $this->getData($column, $order, $offset, $length, $ajax, $this->model);
+        $data = $this->getData($column, $order, $offset, $length, $this->model);
 
         foreach ($data['data'] as $key =>$value){
             $rel = $data['data'][$key]['relationship'];
@@ -48,16 +48,16 @@ class patientController extends baseController {
 
             $created = new DateTime($data['data'][$key]['created']);
             $data['data'][$key]['familyId'] = "F".$created->format("y").$data['data'][$key]['familyId'];
-            $data['data'][$key]['familyIndividualId'] = "F".$created->format("y").$data['data'][$key]['familyId']."-".$rel;
-
-            ChromePhp::log($data['data'][$key]['address']);
+            $data['data'][$key]['familyIndividualId'] =  $data['data'][$key]['familyId']."-" . $rel;
         }
 
 
-        if($ajax==1){
+        if($ajax == 1 || $ajax == "1"){
             return json_encode($data);
         }
-        else $this->app->render($this->view, array("data"=>$data));
+        else {
+            $this->app->render($this->view, array("data"=>$data));
+        }
 
     }
 

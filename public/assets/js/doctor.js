@@ -26,6 +26,7 @@ function addDoctorRow(){
 
 
 function submitForm(){
+    console.log("sf");
     var firstName=$("#firstName").val();
     var lastName=$("#lastName").val();
     var office=$("#office").val();

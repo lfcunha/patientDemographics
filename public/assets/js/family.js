@@ -14,7 +14,7 @@ var aaa;
 function addFamilyRow(){
     s="<tr>" +
         "<td></td>" +
-        "<td><input name='doctorId' type='text'></td>" +
+        "<td><input name='doctorId' id='doctorId' type='text'></td>" +
         "</tr>";
     $("#familyTable").children().last().children().last().after(s);
     $("#addFamily").hide();
@@ -23,7 +23,51 @@ function addFamilyRow(){
 }
 
 
+function submitForm(){
+    console.log("sf");
+    var doctorId=$("#doctorId").val();
 
+
+    $.ajax({
+        type: "POST",
+        url: "family",
+        crossDomain: true,
+        //data: {data:1},
+        data: {doctorId:doctorId.toString()},
+        success: function(response) {
+            console.log(JSON.stringify(response));
+
+             if (response==1){
+                 window.location.href = "https://pintolab.mssm.edu/demographicsDB/family";
+
+             }
+                 /*
+             //ajax call to a function to update database
+             $(elem).parent().html(elem.value);
+             $(elem).parent().css("border", "solid 1px #0f0");
+
+             }
+             else if (response==2) {
+             //database error
+             }
+             else{
+             //failed to pass validation
+             $(elem).css("border-color", "#f00");
+             }
+             */
+
+        } ,
+        error: function(request, status, error) {
+            console.error(error);
+            console.log('error');
+            // alert('Not working!');
+        },
+        dataType: "text json"
+    });
+
+
+
+}
 
 
 

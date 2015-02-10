@@ -36,4 +36,7 @@ class patientModel extends \baseModel {
         return $this->search_($table, $length, $offset, $search, $column, $order);
     }
 
+    public function name(){
+        return "patientModel";
+    }
 }

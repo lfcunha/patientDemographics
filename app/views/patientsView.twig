@@ -166,24 +166,7 @@
                                     <td class="crosshair" name="referralComments" >{{item.referralComments}}</td>
                                     <td class="" name="firstName">{{item.firstName}}</td>
                                     <td class="" name="lastName" >{{item.lastName}}</td>
-                                    <td class="crosshair" name="relationship"> {{ item.relationship ~" - " }}
-                                        {% if (item.relationship == "01") %}
-                                            {{ "proband" }}
-
-                                        {% elseif (item.relationship == "02"  )%}
-                                            {{ "mother" }}
-
-                                        {% elseif (item.relationship == "03"  )%}
-                                            {{ "father" }}
-
-                                        {% elseif (item.relationship == "04"  or item.relationship == "05" or item.relationship == "06") %}
-                                            {{ "sibling" }}
-
-                                        {%  else %}
-                                            {{ "other" }}
-
-                                        {% endif %}
-                                    </td>
+                                    <td class="crosshair" name="relationship"> {{ item.relationship}} </td>
                                     <td class="crosshair" name="referralPatientPhone">{{item.referralPatientPhone}}</td>
                                     <td class="crosshair" name="referralPatientEmail">{{item.referralPatientEmail}}</td>
                                     <td class="crosshair" name="medicalChartID" >{{item.medicalChartId}}</td>
