@@ -40,7 +40,7 @@ class patientController extends baseController {
                     break;
             }
 
-            if ($data['data'][$key]['medicalChart'] == "y") $data['data'][$key]['patientId'] = $data['data'][$key]['medicalChartId'];
+            if (count($data['data'][$key]['medicalChartId']) > 1) $data['data'][$key]['patientId'] = $data['data'][$key]['medicalChartId'];
             else {
                 $dob = new Datetime($data['data'][$key]["dateOfBirth"]);
                 $data['data'][$key]['patientId'] = $data['data'][$key]["lastName"][0].$data['data'][$key]["firstName"][0].$dob->format("ymd") ;
