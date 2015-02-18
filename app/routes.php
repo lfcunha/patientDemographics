@@ -377,6 +377,7 @@ $app->post('/validate2', $authenticate($app),  function()use ($app){
 
 });
 
+
 $app->post('/revalidate', $authenticate($app), function()use ($app){
     $req = $app->request();
     $postdata=$req->post();
@@ -406,4 +407,17 @@ $app->post('/search', $authenticate($app), function()  use ($app){
     $result=$c->search($table, $length, $offset, $search, $column, $order);
     //var_dump($result);
     echo json_encode($result);
+});
+
+$app->post('/generatePnumber', $authenticate($app), function()  use ($app){
+    $req = $app->request();
+    $postdata=$req->post();
+    $data=$postdata["patientIds_"];
+    #ChromePhp::log($data);
+    //echo $data;
+    $c= new patientController();
+    $c->generatePnumber($data);
+
+
+
 });

@@ -118,5 +118,6 @@ $config["dbtables"] = array(
   "patient"        => array("id","referralDate","referralComments","firstName","lastName","relationship","referralPatientPhone","referralPatientEmail","medicalChartId","medicalChart","address","dateOfBirth","selfGender","selfEthnicity","familySelfComments","noteIfFamilyRelatives","diagnosisReferral","diagnosisSelf","diagnosisInDb","preGeneticScreening","brainSurgery","brainSampleInBank","phoneConsented","fullConsented","notes","familyId","fatherId","motherId","created","modified"),
   "doctor"         => array("id","firstName","lastName","office","institution","city","country","created","modified"),
   "family"         => array("id", "doctorId","created", "modified"),
-  );
+  "individuals" => array("id", "individualID", "arrivalDate", "project", "clinician", "originalLabel", "familyID", "gender", "dateofbirth", "relationship", "phenotype", "cyrilic", "intExt", "institute", "country", "receiverName", "alternativeID", "notes", "patientId", "created", "modified")
+);
 

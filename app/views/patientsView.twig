@@ -6,6 +6,7 @@
 
     <script id="individualsTable-template" type="text/x-handlebars-template">
         {% verbatim %}
+            <td><input id="{{id}}" class="checkbox" type="checkbox" onchange="checkedRows(this)"></td>
             <td id={{id}} class="" name="id" >{{id}}</td>
             <td id={{id}} class="" name="referralDate" >{{referralDate}}</td>
             <td id={{id}} class="crosshair" name="referralComments" >{{referralComments}}</td>
@@ -80,6 +81,7 @@
                         <table id="individualsTable" class="table table-hover dataTable table-bordered tablesorter" cellspacing="0"  style="margin-top:5px;width:100%">
                             <thead>
                                 <tr>
+                                    <th id="checkbox" style="width:10px!important;"><input id="all" type="checkbox" /></th>
                                     <th class="sorting" name="id" >id</th>
                                     <th class="sorting" name="referralDate" >referral date</th>
                                     <th class="sorting" name="referralComments" >referral comments</th>
@@ -119,6 +121,7 @@
                             <tfoot>
                                 <tr>
                                 <tr>
+                                    <th id="checkbox" style="width:10px!important;"><input id="all" type="checkbox" /></th>
                                     <th class="sorting" name="id" >id</th>
                                     <th class="sorting" name="referralDate" >referral date</th>
                                     <th class="sorting" name="referralComments" >referral comments</th>
@@ -160,7 +163,8 @@
 
 
                             {% for item in data['data']  %}
-                                <tr>
+                                <tr id={{item.id}}>
+                                    <td><input id="{{item.id}}" class="checkbox" type="checkbox"  onchange="checkedRows(this)"></td>
                                     <td class="" name="id" >{{item.id}}</td>
                                     <td class="" name="referralDate" >{{item.referralDate}}</td>
                                     <td class="crosshair" name="referralComments" >{{item.referralComments}}</td>
@@ -208,9 +212,15 @@
                     <ul class="pagination" id="pagination" style="margin:5px; float:left; font-size:12px">
                     </ul>
                     <ul class="export" style="margin:0px; float:left; margin-top: 7px; padding-left: 15px;">
-                        <form action="exportIsolates" method="post">
+                        <form action="exportPatients" method="post">
                             <input type="hidden" id="submitExportSampleIds" name="sampleIds_" value="" />
                             <span><button style="margin-right:10px; color:#428bca; margin-top:-1px" class="btn btn-sm btn-default" />Export</span>
+                        </form>
+                    </ul>
+                    <ul class="export" style="margin:0px; float:left; margin-top: 7px; padding-left: 15px;">
+                        <form action="generatePnumber" method="post">
+                            <input type="hidden" id="submitAddExtractSampleIds" name="patientIds_" value="" />
+                            <span><button style="margin-right:10px; color:#428bca; margin-top:-1px" class="btn btn-sm btn-default" />Generate Pnumber</span>
                         </form>
                     </ul>
                 </div>
