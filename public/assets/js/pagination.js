@@ -164,19 +164,19 @@ function preparePagination(count, pageSize){
     $("#pagination.pagination").html('<li class="paginate_button previous disabled" aria-controls="isolatesTable" tabindex="-4" id="isolatesTable_previous"><a href="#">Previous</a></li>');
     if(total>7){
         var total_=5;
-        $("#isolatesTable_previous").after('<li class="paginate_button active" aria-controls="isolatesTable" tabindex="1" onClick="select(this);return 0;"><a href="#">1</a></li>');
+        $("#isolatesTable_previous").after('<li class="paginate_button active" aria-controls="isolatesTable" tabindex="1" onClick="getData(this);return 0;"><a href="#">1</a></li>');
         var el="";
         for (i=2; i<total_+1; i++){
-            var el=el+'<li class="paginate_button " aria-controls="isolatesTable" tabindex="' + i +'" onClick="select(this);return 0;"><a href="#">' + i +'</a></li>';
+            var el=el+'<li class="paginate_button " aria-controls="isolatesTable" tabindex="' + i +'" onClick="getData(this);return 0;"><a href="#">' + i +'</a></li>';
         }
         ($("ul.pagination").children().last()).after(el);
-        ($("ul.pagination").children().last()).after('<li class="paginate_button disabled" aria-controls="isolatesTable" tabindex="-2" id="isolatesTable_ellipsis"><a href="#">...</a></li><li class="paginate_button " aria-controls="isolatesTable" tabindex="'+total+'" onClick="select(this);return 0;"><a href="#">'+total+'</a></li>');
+        ($("ul.pagination").children().last()).after('<li class="paginate_button disabled" aria-controls="isolatesTable" tabindex="-2" id="isolatesTable_ellipsis"><a href="#">...</a></li><li class="paginate_button " aria-controls="isolatesTable" tabindex="'+total+'" onClick="getData(this);return 0;"><a href="#">'+total+'</a></li>');
     }
     else {
         if(total>0){
             var el="";
             for(var i=1; i<total+1; i++){
-                var el= el+'<li class="paginate_button " aria-controls="isolatesTable" tabindex="'+i+'" onClick="select(this);return 0;"><a href="#">'+i+'</a></li>';
+                var el= el+'<li class="paginate_button " aria-controls="isolatesTable" tabindex="'+i+'" onClick="getData(this);return 0;"><a href="#">'+i+'</a></li>';
             }
             ($("ul.pagination").children().last()).after(el);
         }
@@ -225,9 +225,9 @@ function setButtons(pages, records){
     var elipsis1_='<li class="paginate_button disabled" aria-controls="isolatesTable" tabindex="-2" id="isolatesTable_ellipsis"><a href="#">...</a></li>';
     var elipsis1 = $($.parseHTML(elipsis1_));
     var elipsis0 = $($.parseHTML(elipsis0_));
-    var first   = '<li class="paginate_button " aria-controls="isolatesTable" tabindex="1" onclick="select(this);return 0;"><a href="#">1</a></li>';
+    var first   = '<li class="paginate_button " aria-controls="isolatesTable" tabindex="1" onclick="getData(this);return 0;"><a href="#">1</a></li>';
     var first_  =  $($.parseHTML(first));
-    var second_ = '<li class="paginate_button " aria-controls="isolatesTable" tabindex="2" onclick="select(this);return 0;"><a href="#">2</a></li>';
+    var second_ = '<li class="paginate_button " aria-controls="isolatesTable" tabindex="2" onclick="getData(this);return 0;"><a href="#">2</a></li>';
     var second  =  $($.parseHTML(second_));
     //'NEXT' BUTTON
     $('.next').on('click', function(){
@@ -453,6 +453,7 @@ function quickSearch(offset,source){
         data: {table: _.last(document.URL.split("/")), length:tableLength, offset:offset, search:searchTerm, column: column, order:order.split("_")[1]},
         //data: {id:"1"},
         beforeSend: function(){
+            console.log("quick search");
             console.log({length:tableLength, offset:offset, search:searchTerm, column: column, order:order.split("_")[1]});
         },
         success: function (response) {
@@ -473,10 +474,10 @@ function quickSearch(offset,source){
 }
 
 function navigatePagination(elem, tag){
-    //console.log("select() tabindex: " + $(elem).attr("tabindex"));
+    //console.log("getData() tabindex: " + $(elem).attr("tabindex"));
     var elipsis0='<li class="paginate_button disabled" aria-controls="isolatesTable" tabindex="-3" id="isolatesTable_ellipsis"><a href="#">...</a></li>';
     var elipsis1='<li class="paginate_button disabled" aria-controls="isolatesTable" tabindex="-2" id="isolatesTable_ellipsis"><a href="#">...</a></li>';
-    //var el='<li class="paginate_button" aria-controls="isolatesTable" tabindex="3" onclick="select(this);return 0;"><a href="#"></a></li>';
+    //var el='<li class="paginate_button" aria-controls="isolatesTable" tabindex="3" onclick="getData(this);return 0;"><a href="#"></a></li>';
     var ind=$(elem).attr("tabindex");
     if (pages>1){
         if(ind==pages){
@@ -629,7 +630,7 @@ function getData(elem, tag) {
             }
         });
     }
-} //select()
+} //getData()
 
 function test(){
     return 1;

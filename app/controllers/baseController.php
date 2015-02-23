@@ -90,12 +90,73 @@ class baseController extends \Slim\slim {
 
     public function search($table, $length, $offset, $search, $column, $order){
         $table=strtolower($table);
-        $translate=array("individuals"=>"individualsModel", "dna"=>"DNAModel", "rna"=>"RNAModel", "viablecell"=>"viableCellModel", "cellline"=>"cellLineModel", "individuals"=>"individualsModel", "patients" => "patientModel");
+        $translate=array("individuals"=>"individualsModel", "dna"=>"DNAModel", "rna"=>"RNAModel", "viablecell"=>"viableCellModel", "cellline"=>"cellLineModel", "individuals"=>"individualsModel", "patients" => "patientModel", "doctor"=>"doctorModel", "family"=>"familyModel");
+
         $model=$this->getModel($translate[$table]);
 
         ChromePhp::log( $table . " / " . $length . " / " . $offset . " / " . $search . " / " . $column . " / " . $order );
         //return $model->name();
         return $model->search($table, $length, $offset, $search, $column, $order[0]);
+
+    }
+
+
+    public function export($data, $table, $filename){
+        $model=$this->getModel($table);
+        $result=$model->export(explode(",",$data));
+
+
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+        header('Cache-Control: max-age=0');
+
+        $objPHPExcel = new PHPExcel();
+        // Set properties
+        $objPHPExcel->getProperties()->setCreator($_SESSION['user'])
+            ->setLastModifiedBy($_SESSION['user'])
+            ->setTitle("Patients")
+            ->setSubject("Patients")
+            ->setDescription("DemographicsDB")
+            ->setKeywords("Demographics, pintoLab, autism, patients")
+            ->setCategory("Patients");
+        $objPHPExcel->getActiveSheet()->setTitle('patients');
+
+
+        $alpha = 'A';
+        foreach($result[0] as $key=>$val){
+            //var_dump($key);
+            // $objPHPExcel->setActiveSheetIndex(0)
+            //             ->setCellValueByColumnAndRow($i, 1, $key);
+            if($key=="User") continue;
+            $objPHPExcel->getActiveSheet()->getCell($alpha.'1')->setValueExplicit($key, PHPExcel_Cell_DataType::TYPE_STRING);
+            $alpha++;
+        }
+
+        foreach($result as $row_=>$data) {
+            $row=$row_+2;
+            $i=0;
+            foreach($data as $key=>$val){
+                //var_dump($key);
+                if($key=="User") continue;
+                if($val=="null") $val="";
+                $objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow($i, $row, $val);
+                $i++;
+            }
+
+
+        }
+
+        $objPHPExcel->setActiveSheetIndex(0)->getStyle("A1:AE1")->applyFromArray(array("font" => array( "bold" => true)));
+
+
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'CSV');  //Excel2007
+        // If you want to output e.g. a PDF file, simply do:
+        //$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'PDF');
+        //$objWriter->save('/data/www/crip/influenzadb/public/excel_files/MyExcel.xslx');
+
+        $objWriter->save('php://output');
 
     }
 }

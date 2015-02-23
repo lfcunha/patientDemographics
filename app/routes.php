@@ -417,7 +417,15 @@ $app->post('/generatePnumber', $authenticate($app), function()  use ($app){
     //echo $data;
     $c= new patientController();
     $c->generatePnumber($data);
+});
 
 
 
+$app->post('/exportPatients', $authenticate($app),function()  use ($app){
+    $req = $app->request();
+    $postdata=$req->post();
+    $data=$postdata["sampleIds_"];
+    $c= new patientController();
+    $c->exportPatients($data);
+    echo 0;
 });

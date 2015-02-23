@@ -152,4 +152,30 @@ class baseModel{
         return $result;
         }
 
+
+
+    public function export_($data, $table){
+        $search="";
+
+        foreach($data as $value){
+            if (strlen($value)<1) $search=$search. " `id` LIKE '%" . $value . "%' or ";
+            else                  $search=$search. " `id` LIKE '" . $value . "' or ";
+        }
+
+        $search_=rtrim($search, " or ");
+
+        $query  ='SELECT * FROM `'. $table .'` WHERE '. $search_ .' ORDER BY modified DESC';
+        $sth=$this->dbh->prepare($query);
+
+
+        $sth->execute();
+        $result=array();
+        while ($row=$sth->fetch(PDO::FETCH_ASSOC)) {
+            // $user["admin"]!=1?$row['admin']=0:$row['admin']=1;
+            array_push($result, $row);
+        }
+        $this->dbh=null;
+        return $result;
+    }
+
 }//end class

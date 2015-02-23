@@ -42,4 +42,10 @@ class patientModel extends \baseModel {
     public function name(){
         return "patientModel";
     }
+
+
+    public function export($data){
+        $result = $this->export_($data, $this->table);
+        return $result;
+    }
 }

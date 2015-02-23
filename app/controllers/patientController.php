@@ -173,4 +173,17 @@ class patientController extends baseController {
         }
         //return $this->processAjax_($data, $this->model);
     }
+
+
+
+
+    public function exportPatients($data){
+        $this->export($data, $this->model, "patients");
+
+
+    }
+
+
+
+
 }
