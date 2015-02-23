@@ -34,23 +34,23 @@ class baseController extends \Slim\slim {
     }
 
 
-    protected function getData($column, $order, $offset, $length, $table=""){
+    protected function select($column, $order, $offset, $length, $table=""){
         $model = $this->getModel($table);
-        $data = $model->getData($column, $order, $offset, $length);
+        $data = $model->select($column, $order, $offset, $length);
         return $data;
     }
 
-    protected function saveData($dataArray=null, $ajax=0, $table="", $view=""){
+    protected function insert($dataArray=null, $ajax=0, $table="", $view=""){
         $model=$this->getModel($table);
-        $data=$model->saveToDB($dataArray);
+        $data=$model->insert($dataArray);
         if($ajax==1){
             return $data;
         }
         else $this->app->render($view, array("data"=>$data));
     }
 
-    protected function editCell($data, $table){
-        return $this->getModel($table)->saveEditToDb($data);
+    protected function update($data, $table){
+        return $this->getModel($table)->update($data);
     }
 
 
@@ -61,7 +61,7 @@ class baseController extends \Slim\slim {
 
         if ($result[0]==1){
 
-            $result = $model->saveToDB($data);
+            $result = $model->insert($data);
             if ($result[0]==1 || $result==1){
                 $message='<div style="padding: 5px;"><div id="inner-message" class="alert alert-success" style="margin: 0 auto"><button type="button" class="close" data-dismiss="alert">&times;</button>Successfully submitted data!</div><div>';
                 $this->app->flashnow('success', $message);

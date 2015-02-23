@@ -17,14 +17,9 @@ class baseModel{
     }
 
 
-    protected function getPDO(){
-        return $this->dbh;
-    }
-
-
     protected function get_idUser($user_){
         try{
-            $dbh= $this->getPDO();
+            $dbh=  $this->dbh;
             $sth=$dbh->prepare('SELECT * FROM `Users` WHERE `Username` LIKE ?');
             $sth->bindParam(1,$user_);
             $sth->execute();
@@ -38,22 +33,15 @@ class baseModel{
         }
     }
 
-
-    protected function getNumberRecords($table){
-        $query = "SELECT count(*) from ".$table." WHERE 1";
-        try {
-            $sth= $this->dbh->prepare($query);
-            $sth->execute();
-        }
-        catch(PDOException $ex) {
-            echo json_encode($ex);
-        }
-        $result= $sth->fetch();
-        return $result[0];
+    protected function totalRecords($table){
+        $sth=$this->dbh->prepare('SELECT count(*) FROM `'.$table.'`');
+        $sth->execute();
+        $totalRecords=$sth->fetch(PDO::FETCH_ASSOC);
+        return (int)$totalRecords['count(*)'];
     }
 
 
-    protected function select($table, $column, $order, $offset, $length){
+    protected function select_($table, $column, $order, $offset, $length){
         $b=array();
         $b['data']=array();
         $query="SELECT * from ".$table." WHERE 1 ORDER BY `". $column ."` ". $order ." LIMIT ". $length ." OFFSET " . $offset ;
@@ -67,17 +55,18 @@ class baseModel{
         while($row=$sth->fetch(PDO::FETCH_ASSOC)){
             array_push($b['data'], $row);
         }
-        //get number of records
-        $b['count']= $this->getNumberRecords($table);
+        //$b['count']= $this->getNumberRecords($table);
+        $b['count']= $this->totalRecords($table);
         $b['size']=$length;
         $b['offset']=$offset;
         $b['total']=$b['count'];
+        $b['query']=$query;
         $dbh = null;
         return $b;
     }
 
 
-    protected function saveToDB_($data){
+    protected function insert_($data){
         $data_=$data["data"];
         $table=$data["table"];
         for($i=0; $i<count($data_); $i++) {
@@ -111,8 +100,8 @@ class baseModel{
         return 1;
     }
 
-
-    protected function saveEditToDb_($data, $table){
+    //protected function update($data, $table){
+    protected function update_($data, $table){
         try{
             $sth=$this->dbh->prepare('UPDATE `'.$table.'` SET '. $data["column"] . ' = "'. $data["value"] .'" WHERE `id` LIKE "'. $data["id"] .'"');
             $res=$sth->execute();
@@ -125,13 +114,6 @@ class baseModel{
         }
     }
 
-
-    protected function totalRecords($table){
-        $sth=$this->dbh->prepare('SELECT count(*) FROM `'.$table.'`');
-        $sth->execute();
-        $totalRecords=$sth->fetch(PDO::FETCH_ASSOC);
-        return (int)$totalRecords['count(*)'];
-    }
 
     protected function search_($table, $length, $offset, $search, $column, $order){
         $query="";
@@ -161,13 +143,12 @@ class baseModel{
             $i++;
         }
 
-        $result['query']=$sth;
+        $result['query']=$query_;
         $result['count']=$count;
         $result['size']=$length;
         $result['total']=$this->totalRecords($table);
         $result['offset']=$offset;
         $result['queryCount']=$sthCount;
-        //return $query_;
         return $result;
         }
 

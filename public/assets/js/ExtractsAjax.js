@@ -127,9 +127,9 @@ function setButtons(){
     var elipsis1_='<li class="paginate_button disabled" aria-controls="isolatesTable" tabindex="-2" id="isolatesTable_ellipsis"><a href="#">...</a></li>';
     var elipsis1 = $($.parseHTML(elipsis1_));
     var elipsis0 = $($.parseHTML(elipsis0_));
-    var first   = '<li class="paginate_button " aria-controls="isolatesTable" tabindex="1" onclick="getData(this);return 0;"><a href="#">1</a></li>';
+    var first   = '<li class="paginate_button " aria-controls="isolatesTable" tabindex="1" onclick="select(this);return 0;"><a href="#">1</a></li>';
     var first_  =  $($.parseHTML(first));
-    var second_ = '<li class="paginate_button " aria-controls="isolatesTable" tabindex="2" onclick="getData(this);return 0;"><a href="#">2</a></li>';
+    var second_ = '<li class="paginate_button " aria-controls="isolatesTable" tabindex="2" onclick="select(this);return 0;"><a href="#">2</a></li>';
     var second  =  $($.parseHTML(second_));
 
 
@@ -364,7 +364,7 @@ function tbodyIsolatesTemplate(data){
 function repaginate(data) {
     pages=Math.ceil(data.total/data.size);
     // console.log("pages: " + pages);
-    var second = '<li class="paginate_button" aria-controls="isolatesTable" tabindex="2" onclick="getData(this);return 0;"><a href="#">2</a></li>';
+    var second = '<li class="paginate_button" aria-controls="isolatesTable" tabindex="2" onclick="select(this);return 0;"><a href="#">2</a></li>';
     var $el = $($.parseHTML(second));
     var elipsis1='<li class="paginate_button disabled" aria-controls="isolatesTable" tabindex="-3" id="isolatesTable_ellipsis"><a href="#">...</a></li>';
     var $elipsis1=$($.parseHTML(elipsis1));
@@ -589,7 +589,7 @@ function quickSearch(offset,source){
                 count=data.count;
                 size=data.size;
                 //  console.log("pages: " + pages);
-                var second = '<li class="paginate_button" aria-controls="isolatesTable" tabindex="2" onclick="getData(this);return 0;"><a href="#">2</a></li>';
+                var second = '<li class="paginate_button" aria-controls="isolatesTable" tabindex="2" onclick="select(this);return 0;"><a href="#">2</a></li>';
                 var $el = $($.parseHTML(second));
                 var elipsis1='<li class="paginate_button disabled" aria-controls="isolatesTable" tabindex="-3" id="isolatesTable_ellipsis"><a href="#">...</a></li>';
                 var $elipsis1=$($.parseHTML(elipsis1));
@@ -666,7 +666,7 @@ function quickSearch(offset,source){
 
 
 function getData(elem, tag) {
-    // console.log("getData() without quickSearch()");
+    // console.log("select() without quickSearch()");
 
     //console.log($(elem).html(), tag);
     ////// SET PAGINATION /////////////
@@ -676,10 +676,10 @@ function getData(elem, tag) {
     var order;
 
     if(elem){ //if called from pagination, and not from the number of rows selection menu
-        //console.log("getData() tabindex: " + $(elem).attr("tabindex"));
+        //console.log("select() tabindex: " + $(elem).attr("tabindex"));
         var elipsis0='<li class="paginate_button disabled" aria-controls="isolatesTable" tabindex="-3" id="isolatesTable_ellipsis"><a href="#">...</a></li>';
         var elipsis1='<li class="paginate_button disabled" aria-controls="isolatesTable" tabindex="-2" id="isolatesTable_ellipsis"><a href="#">...</a></li>';
-        //var el='<li class="paginate_button" aria-controls="isolatesTable" tabindex="3" onclick="getData(this);return 0;"><a href="#"></a></li>';
+        //var el='<li class="paginate_button" aria-controls="isolatesTable" tabindex="3" onclick="select(this);return 0;"><a href="#"></a></li>';
         var ind=$(elem).attr("tabindex");
 
         if (pages>1){
@@ -838,7 +838,7 @@ function getData(elem, tag) {
             }
         });
     }
-} //getData()
+} //select()
 
 function setStatusMulti(elem){
     self=elem;

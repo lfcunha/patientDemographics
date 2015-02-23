@@ -11,11 +11,11 @@ class cellLineController extends baseController {
 
 
     public function getCellLine($column, $order, $offset, $length, $ajax=0){
-        return $this->getData($column, $order, $offset, $length, $ajax,$this->model, "cellLineView.twig");
+        return $this->select($column, $order, $offset, $length, $ajax,$this->model, "cellLineView.twig");
     }
 
     public function fetchCellLine($column, $order, $offset, $length){
-        return $this->getData($column, $order, $offset, $length, 0, $this->model);
+        return $this->select($column, $order, $offset, $length, 0, $this->model);
     }
 
     public function deleteCellLine(){
@@ -27,7 +27,7 @@ class cellLineController extends baseController {
     }
 
     public function editCellLine($data){
-        return $this->editCell($data,"cellLineModel");
+        return $this->update($data,"cellLineModel");
     }
 
     public function processExcel($data){

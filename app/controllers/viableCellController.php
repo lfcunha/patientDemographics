@@ -12,7 +12,7 @@ class viableCellController extends baseController {
 
 
     public function getViableCell($column, $order, $offset, $length, $ajax){
-        return $this->getData($column, $order, $offset, $length, $ajax, $this->model, "viableCellView.twig");
+        return $this->select($column, $order, $offset, $length, $ajax, $this->model, "viableCellView.twig");
     }
 
     public function fetchViableCell($column, $order, $offset, $length){
@@ -28,7 +28,7 @@ class viableCellController extends baseController {
     }
 
     public function editViableCell($data){
-        return $this->editCell($data,$this->model);
+        return $this->update($data,$this->model);
     }
 
     public function processExcel($data){

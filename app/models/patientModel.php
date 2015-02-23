@@ -17,21 +17,24 @@ class patientModel extends \baseModel {
         return $this->env["rules"][$this->table];
     }
 
-    function getData($column, $order, $offset, $length){
+    //public function select
+    function select($column, $order, $offset, $length){
         $table = $this->table;
-        $data = $this->select($table, $column, $order, $offset, $length);
+        $data = $this->select_($table, $column, $order, $offset, $length);
         return $data;
     }
 
-    public function saveToDB($data){
-        return $this->saveToDB_(array("data" => $data, "table" => $this->table));
+    //public function insert($data){
+    public function insert($data){
+        return $this->insert_(array("data" => $data, "table" => $this->table));
     }
 
-    public function saveEditToDb($data){
-        return $this->saveEditToDb_($data, $this->table);
+    //public function update($data){
+    public function update($data){
+        return $this->update_($data, $this->table);
     }
 
-
+    //public function select
     public function search($table, $length, $offset, $search, $column, $order){
         return $this->search_($table, $length, $offset, $search, $column, $order);
     }

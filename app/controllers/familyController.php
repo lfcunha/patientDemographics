@@ -12,7 +12,7 @@ class familyController extends baseController {
 
 
     public function getFamily($column, $order, $offset, $length, $ajax){
-        $data = $this->getData($column, $order, $offset, $length, $this->model);
+        $data = $this->select($column, $order, $offset, $length, $this->model);
         if($ajax == 1 || $ajax == "1"){
             return json_encode($data);
         }
@@ -22,7 +22,7 @@ class familyController extends baseController {
     }
 
     public function fetchFamily($column, $order, $offset, $length){
-        return $this->getData($column, $order, $offset, $length);
+        return $this->select($column, $order, $offset, $length);
     }
 
     public function deleteFamily(){
@@ -30,11 +30,11 @@ class familyController extends baseController {
     }
 
     public function addFamily($data){
-        return $this->saveData($data, 1, $this->model, $this->view);
+        return $this->insert($data, 1, $this->model, $this->view);
     }
 
     public function editFamily($data){
-        return $this->editCell($data,$this->model);
+        return $this->update($data,$this->model);
     }
 
 

@@ -17,17 +17,17 @@ class familyModel extends \baseModel {
         return $this->env["rules"]["family"];
     }
 
-    function getData($column, $order, $offset, $length){
+    function select($column, $order, $offset, $length){
         $table="family";
-        return $this->select($table, $column, $order, $offset, $length);
+        return $this->select_($table, $column, $order, $offset, $length);
     }
 
-    public function saveToDB($data){
-        return $this->saveToDB_(array("data"=>$data, "table"=>"family"));
+    public function insert($data){
+        return $this->insert_(array("data"=>$data, "table"=>"family"));
     }
 
-    public function saveEditToDb($data){
-        return $this->saveEditToDb_($data, "family");
+    public function update($data){
+        return $this->update_($data, "family");
     }
 
     public function search($table, $length, $offset, $search, $column, $order){

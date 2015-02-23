@@ -19,18 +19,18 @@ class doctorModel extends \baseModel {
         return $this->env["rules"]["doctor"];
     }
 
-    function getData($column, $order, $offset, $length){
+    function select($column, $order, $offset, $length){
         $table="doctor";
-        $data = $this->select($table, $column, $order, $offset, $length);
+        $data = $this->select_($table, $column, $order, $offset, $length);
         return $data;
     }
 
-    public function saveToDB($data){
-        return $this->saveToDB(array("data"=>$data, "table"=>"doctor"));
+    public function insert($data){
+        return $this->insert_(array("data"=>$data, "table"=>"doctor"));
     }
 
-    public function saveEditToDb($data){
-        return $this->saveEditToDb_($data, "doctor");
+    public function update($data){
+        return $this->update_($data, "doctor");
     }
 
     public function search($table, $length, $offset, $search, $column, $order){

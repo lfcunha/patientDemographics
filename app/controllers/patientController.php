@@ -13,7 +13,7 @@ class patientController extends baseController {
 
 
     public function getPatients($column, $order, $offset, $length, $ajax){
-        $data = $this->getData($column, $order, $offset, $length, $this->model);
+        $data = $this->select($column, $order, $offset, $length, $this->model);
 
         foreach ($data['data'] as $key =>$value){
             $rel = $data['data'][$key]['relationship'];
@@ -63,7 +63,7 @@ class patientController extends baseController {
     }
 
     public function fetchPatient($column, $order, $offset, $length){
-        return $this->getData($column, $order, $offset, $length, 0, $this->model);
+        return $this->select($column, $order, $offset, $length, 0, $this->model);
     }
 
     public function deletePatient(){
@@ -75,7 +75,7 @@ class patientController extends baseController {
     }
 
     public function editPatient($data){
-        return $this->editCell($data,$this->model);
+        return $this->update($data,$this->model);
     }
 
 

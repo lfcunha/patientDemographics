@@ -12,7 +12,7 @@ class doctorController extends baseController {
 
 
     public function getDoctor($column, $order, $offset, $length, $ajax){
-        $data = $this->getData($column, $order, $offset, $length, $this->model);
+        $data = $this->select($column, $order, $offset, $length, $this->model);
         if($ajax == 1 || $ajax == "1"){
             return json_encode($data);
         }
@@ -23,7 +23,7 @@ class doctorController extends baseController {
     }
 
     public function fetchDoctor($column, $order, $offset, $length){
-        return $this->getData($column, $order, $offset, $length, 0, $this->model);
+        return $this->select($column, $order, $offset, $length, 0, $this->model);
     }
 
     public function deleteDoctor(){
@@ -31,11 +31,11 @@ class doctorController extends baseController {
     }
 
     public function addDoctor($data){
-        return $this->saveData($data, 1, $this->model, $this->view);
+        return $this->insert($data, 1, $this->model, $this->view);
     }
 
     public function editDoctor($data){
-        return $this->editCell($data,$this->model);
+        return $this->update($data,$this->model);
     }
 
     public function processExcel($data){
