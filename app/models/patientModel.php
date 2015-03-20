@@ -10,7 +10,7 @@ class patientModel extends \baseModel {
 
     function __construct() {
         parent::__construct();
-        $this->table = "patient";
+        $this->table = "patient_doc";
     }
 
     public function getRules(){

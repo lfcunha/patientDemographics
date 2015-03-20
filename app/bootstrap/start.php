@@ -67,6 +67,8 @@ $env["rules"]=$config["rules"];
 #$app->model = new sampleModel("a");
 #$app->model->sayHello();
 
+
+
 $starter  = new \SlimStarter\Bootstrap($app);
 
 

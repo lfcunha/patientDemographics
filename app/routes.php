@@ -429,3 +429,9 @@ $app->post('/exportPatients', $authenticate($app),function()  use ($app){
     $c->exportPatients($data);
     echo 0;
 });
+
+
+$app->get('/users', $authenticate($app),function()  use ($app){
+    $c= new usersController();
+    echo $c->run();
+});

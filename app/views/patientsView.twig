@@ -39,6 +39,8 @@
             <td id={{id}} class="crosshair" name="familyIndividualId" >{{familyIndividualId }}</td>
             <td id={{id}} class="crosshair" name="fatherId">{{fatherId}}</td>
             <td id={{id}} class="crosshair" name="motherId">{{motherId}}</td>
+            <td id={{id}} class="" name="doc" >{{doc}}</td>
+            <td id={{id}} class="" name="Institution" >{{Institution}}</td>
             <td id={{id}} class="" name="created">{{created}}</td>
             <td id={{id}} class="" name="modified" >{{modified}}</td>
         {% endverbatim %}
@@ -114,6 +116,8 @@
                                     <th class="sorting" name="familyIndividualId" >family Individual ID</th>
                                     <th class="sorting" name="fatherId">fatherID</th>
                                     <th class="sorting" name="motherId">motherID</th>
+                                    <th class="sorting" name="doc">doc</th>
+                                    <th class="sorting" name="Institution">Institution</th>
                                     <th class="sorting" name="created">created</th>
                                     <th class="sorting" name="modified" >modified</th>
                                 </tr>
@@ -154,6 +158,8 @@
                                     <th class="sorting" name="familyIndividualId" >family Individual ID</th>
                                     <th class="sorting" name="fatherId">fatherID</th>
                                     <th class="sorting" name="motherId">motherID</th>
+                                    <th class="sorting" name="doc">doc</th>
+                                    <th class="sorting" name="Institution">Institution</th>
                                     <th class="sorting" name="created">created</th>
                                     <th class="sorting" name="modified" >modified</th>
                                 </tr>
@@ -170,7 +176,7 @@
                                     <td class="crosshair" name="referralComments" >{{item.referralComments}}</td>
                                     <td class="" name="firstName">{{item.firstName}}</td>
                                     <td class="" name="lastName" >{{item.lastName}}</td>
-                                    <td class="crosshair" name="relationship"> {{ item.relationship}} </td>
+                                    <td class="crosshair" name="relationship"> {{item.relationship}} </td>
                                     <td class="crosshair" name="referralPatientPhone">{{item.referralPatientPhone}}</td>
                                     <td class="crosshair" name="referralPatientEmail">{{item.referralPatientEmail}}</td>
                                     <td class="crosshair" name="medicalChartID" >{{item.medicalChartId}}</td>
@@ -198,6 +204,9 @@
                                     <td class="" name="familyIndividualId" >{{ item.familyIndividualId}}</td>
                                     <td class="crosshair" name="fatherId">{{item.fatherId}}</td>
                                     <td class="crosshair" name="motherId">{{item.motherId}}</td>
+                                    <td class="crosshair" name="doc">{{item.doc}}</td>
+                                    <td class="crosshair" name="Institution">{{item.Institution}}</td>
+
                                     <td class="" name="created">{{item.created}}</td>
                                     <td class="" name="modified" >{{item.modified}}</td>
                                 </tr>

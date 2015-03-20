@@ -155,7 +155,7 @@ class patientController extends baseController {
         foreach ($data as $id){
 
 
-            $sth=$this->dbh->prepare("SELECT * FROM  `patient` WHERE  `id` = ".$id." LIMIT 0 , 30");
+            $sth=$this->dbh->prepare("SELECT * FROM  `patient_doc` WHERE  `id` = ".$id." LIMIT 0 , 30");
             $sth->execute();
             $res=$sth->fetch(PDO::FETCH_ASSOC);
             $created = new DateTime($res["created"]);

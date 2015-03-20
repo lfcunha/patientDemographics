@@ -117,13 +117,13 @@ class baseModel{
 
     protected function search_($table, $length, $offset, $search, $column, $order){
         $query="";
-        if ($table=="patients") $table="patient";
+        if ($table=="patients") $table="patient_doc";
         foreach ($this->tableColumns[$table] as $key) {
             $query.="`";
             $query.=$key;
-            $query .= "` LIKE '";
+            $query .= "` LIKE '%";
             $query .= $search;
-            $query .= "' OR ";
+            $query .= "%' OR ";
         };
 
         $query = rtrim($query, " OR ");

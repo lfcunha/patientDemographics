@@ -11,6 +11,26 @@ require_once "config.php";
 
 require ROOT."/app/config/dbparams.php";
 
+use Illuminate\Database\Capsule\Manager as Capsule;
+
+$capsule = new Capsule;
+$capsule->addConnection(array(
+    'driver'    => 'mysql',
+    'host'      => $opts['hn'],
+    'database'  => $opts['db'],
+    'username'  => $opts['un'],
+    'password'  => $opts['pw'],
+    'charset'   => 'utf8',
+    'collation' => 'utf8_general_ci',
+    'prefix'    => ''
+));
+$capsule->setAsGlobal();
+$capsule->bootEloquent();
+// set timezone for timestamps etc
+date_default_timezone_set('UTC');
+
+
+
 
 $config['database'] = array(
     'default'       => 'mysql',
@@ -118,6 +138,8 @@ $config["dbtables"] = array(
   "patient"        => array("id","referralDate","referralComments","firstName","lastName","relationship","referralPatientPhone","referralPatientEmail","medicalChartId","medicalChart","address","dateOfBirth","selfGender","selfEthnicity","familySelfComments","noteIfFamilyRelatives","diagnosisReferral","diagnosisSelf","diagnosisInDb","preGeneticScreening","brainSurgery","brainSampleInBank","phoneConsented","fullConsented","notes","familyId","fatherId","motherId","created","modified"),
   "doctor"         => array("id","firstName","lastName","office","institution","city","country","created","modified"),
   "family"         => array("id", "doctorId","created", "modified"),
-  "individuals" => array("id", "individualID", "arrivalDate", "project", "clinician", "originalLabel", "familyID", "gender", "dateofbirth", "relationship", "phenotype", "cyrilic", "intExt", "institute", "country", "receiverName", "alternativeID", "notes", "patientId", "created", "modified")
+  "individuals" => array("id", "individualID", "arrivalDate", "project", "clinician", "originalLabel", "familyID", "gender", "dateofbirth", "relationship", "phenotype", "cyrilic", "intExt", "institute", "country", "receiverName", "alternativeID", "notes", "patientId", "created", "modified"),
+  "patient_doc"        => array("id","referralDate","referralComments","firstName","lastName","relationship","referralPatientPhone","referralPatientEmail","medicalChartId","medicalChart","address","dateOfBirth","selfGender","selfEthnicity","familySelfComments","noteIfFamilyRelatives","diagnosisReferral","diagnosisSelf","diagnosisInDb","preGeneticScreening","brainSurgery","brainSampleInBank","phoneConsented","fullConsented","notes","familyId","fatherId","motherId","created","modified", "doc", "Institution"),
+
 );
 
