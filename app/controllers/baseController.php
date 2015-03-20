@@ -108,7 +108,7 @@ class baseController extends \Slim\slim {
 
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+        header('Content-Disposition: attachment;filename="'.$filename.'.csv"');
         header('Cache-Control: max-age=0');
 
         $objPHPExcel = new PHPExcel();

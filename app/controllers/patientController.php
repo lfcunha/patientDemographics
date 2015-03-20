@@ -161,7 +161,7 @@ class patientController extends baseController {
             $created = new DateTime($res["created"]);
             $familyID="F" .$created->format("y"). $res["familyId"] . "-"  . $res["relationship"];
 
-            $dataForDb=array("arrivalDate"=>date("Y-m-d"), "project"=>"", "clinician" =>"", "originalLabel"=>"", "familyID"=>$familyID, "gender"=>"", "dateofbirth"=>null, "relationship"=>"", "phenotype"=>"", "cyrilic"=>"", "intExt"=>"", "institute"=>"", "country"=>"", "receiverName"=>"", "alternativeID"=>"", "notes"=>"", "patientId"=>$id);
+            $dataForDb=array("arrivalDate"=>date("Y-m-d"), "project"=>"", "clinician" =>$res["doc"], "originalLabel"=>"", "familyID"=>$familyID, "gender"=>"", "dateofbirth"=>null, "relationship"=>$res["relationship"], "phenotype"=>"", "cyrilic"=>"", "intExt"=>"", "institute"=>$res["Institution"], "country"=>"", "receiverName"=>"", "alternativeID"=>"", "notes"=>"", "patientId"=>$id);
             $dataArray["data"][$count]=$dataForDb;
             $count++;
         }

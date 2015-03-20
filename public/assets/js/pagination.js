@@ -574,6 +574,7 @@ function tbodyTemplate(data){
         var placeHolder = $(tbody).find('tr').last();
         var html = template(row);
         placeHolder.append(html);
+        setCheckboxes();
     }
 }
 
@@ -631,6 +632,123 @@ function getData(elem, tag) {
         });
     }
 } //getData()
+
+
+var checkedRowsSet=new Array();
+function checkedRows(elem){
+    self=elem;
+    var index = checkedRowsSet.indexOf(self.id);
+    if(self.checked) {
+        if (index<0) {
+            checkedRowsSet.push(self.id)
+
+        }
+    }
+    else {
+        if (index>-1) checkedRowsSet.splice(index, 1);
+        var Allindex = checkedRowsSet.indexOf("all");
+        if($("#all").is(":checked")) {
+            $("#all").prop("checked", false);
+            checkedRowsSet.splice(Allindex, 1);
+        }
+    }
+    var values_ = checkedRowsSet.join();
+    $("#submitAddExtractSampleIds").val(values_);
+    $("#submitExportSampleIds").val(values_);
+    //$("#submitGetExtractSampleIds").val(values_);
+    if (checkedRowsSet.length==0){
+        $("#ExportIsolatesButton").html("Export all");
+    }
+    else {
+        $("#ExportIsolatesButton").html("Export selected");
+    }
+
+}
+
+
+//checkboxes
+var all=0;
+function activateTableSelections(){
+    var button1=$("#submitAddExtractSampleIds");
+    var button2=$("#submitExportSampleIds");
+    if (all==0){
+        //this is the first time "all" is clicked, so do add all to the checkedRowsSet array
+        $(":checkbox").parent().parent().children().find(":checkbox").prop('checked', true);
+
+        if($("#all").is(":checked")) {
+            $("#ExportIsolatesButton").html("Export selected");
+            $(":checkbox").prop('checked', true)
+            $(":checkbox").each(function(e,v){
+                var index = checkedRowsSet.indexOf(v.id);
+                if (index<0) {
+                    checkedRowsSet.push(v.id)
+                }
+            })
+            var values_ = checkedRowsSet.join();
+            button1.val(values_);
+            button2.val(values_);
+            //$("#submitGetExtractSampleIds").val(values_);
+            // console.log($("#submitAddExtractSampleIds").val())
+            // console.log(checkedRowsSet.join())
+        }
+        //add a listener for future clicks
+        $("#all").on("click", function(){
+            if($("#all").is(":checked")) {
+                $("#ExportIsolatesButton").html("Export selected");
+                $(":checkbox").prop('checked', true)
+                $(":checkbox").each(function(e,v){
+                    var index = checkedRowsSet.indexOf(v.id);
+                    if (index<0) {
+                        checkedRowsSet.push(v.id)
+                    }
+                })
+                button1.val(checkedRowsSet.join());
+                button2.val(checkedRowsSet.join());
+                //$("#submitGetExtractSampleIds").val(checkedRowsSet.join());
+            }
+            else {
+                //$(":checkbox").parent().parent().children().find(".checkbox").prop('checked', false)
+                $("#ExportIsolatesButton").html("Export all");
+                $(":checkbox").prop('checked', false)
+                $(":checkbox").each(function(e,v){
+                    var index = checkedRowsSet.indexOf(v.id);
+                    if (index>-1) checkedRowsSet.splice(index, 1);
+                })
+                button1.val(checkedRowsSet.join());
+                button2.val(checkedRowsSet.join());
+                //$("#submitGetExtractSampleIds").val(checkedRowsSet.join());
+            }
+        });
+    }
+    all=1;
+}
+
+function setCheckboxes(){
+    console.log("setCheckboxes()");
+    $(":checkbox").each(function(e,v){
+        var index =checkedRowsSet.indexOf(v.id);
+        if (index>-1) {
+            console.log(v.id);
+            var _id= "#"+v.id + ".checkbox";
+            console.log(_id);
+            $(_id).prop("checked", "true")
+        }
+    })
+    var a=1;
+    $(":checkbox").each(function(e,v){
+        //console.log(e,v);
+        if(v.id!="all"){
+            if(!$(v).is(":checked")) {
+                a=0;
+            }}})
+
+    if (a==1){
+        $("#all").prop('checked', true);
+    }
+    else {
+        $("#all").prop('checked', false);
+    }
+}
 
 function test(){
     return 1;
