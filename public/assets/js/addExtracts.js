@@ -132,17 +132,17 @@ $("#button3").on("click", function (event) {
         for (var i=0; i<numberExtracts; i++){
 
             s='<tr>';
-            s=s+'<td><input type="hidden" row='+ i +' name="'+count+'XSample_Identifier" id="idHandler" value='+ sampleIdentifier + ' onblur="act(this)" /><span id="idValue">'+sampleIdentifier+'</span></td>';
-            s=s+'<td><input type="text" row='+ i +' name="'+count+'XSample_Volume" id="vol" style="width:100%" onblur="act(this)"></td>';
-            s+='<td><input type=text" row='+ i +' name="'+count+'XSample_Concentration(ng_ul)" id="conc" style="width:100%" onblur="act(this)"></td>';
-            s+='<td><select name="'+count+'XType" row='+ i +' class="form-control" onblur="act(this)"><option value="">select</option><option value="qbit">Qbit</option><option value="nanodrop">Nanodrop</option><option value="other">Other</option></select></td>';
+            s=s+'<td><input type="hidden" row='+ i +' name="'+count+'XSample_Identifier" id="idHandler" value='+ sampleIdentifier + ' onblur="pushEditToDB(this)" /><span id="idValue">'+sampleIdentifier+'</span></td>';
+            s=s+'<td><input type="text" row='+ i +' name="'+count+'XSample_Volume" id="vol" style="width:100%" onblur="pushEditToDB(this)"></td>';
+            s+='<td><input type=text" row='+ i +' name="'+count+'XSample_Concentration(ng_ul)" id="conc" style="width:100%" onblur="pushEditToDB(this)"></td>';
+            s+='<td><select name="'+count+'XType" row='+ i +' class="form-control" onblur="pushEditToDB(this)"><option value="">select</option><option value="qbit">Qbit</option><option value="nanodrop">Nanodrop</option><option value="other">Other</option></select></td>';
 
             s+='<td><div class="radio">' +
                 '<label><input type="radio" row='+ i +' name="'+count+'XChimeric" id="chimericYes" value="yes">yes&nbsp;&nbsp;</label>' +
                 '<label><input type="radio" row='+ i +' name="'+count+'XChimeric" id="chimericNo" value="no" checked>no</label>' +
                 '</td>';
 
-            s+='<td><select row='+ i +' name="'+count+'XCost_Site" class="form-control" onblur="act(this)"><option value="">select</option><option value="crip">CRIP</option><option value="invoice">Invoice</option></select></td>';
+            s+='<td><select row='+ i +' name="'+count+'XCost_Site" class="form-control" onblur="pushEditToDB(this)"><option value="">select</option><option value="crip">CRIP</option><option value="invoice">Invoice</option></select></td>';
 
             s+='</tr>'
 

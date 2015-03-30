@@ -4913,7 +4913,7 @@
 		/**
 		 * Perform a jQuery selector action on the table's TR elements (from the tbody) and
 		 * return the resulting jQuery object.
-		 *  @param {string|node|jQuery} sSelector jQuery selector or node collection to act on
+		 *  @param {string|node|jQuery} sSelector jQuery selector or node collection to pushEditToDB on
 		 *  @param {object} [oOpts] Optional parameters for modifying the rows to be included
 		 *  @param {string} [oOpts.filter=none] Select TR elements that meet the current filter
 		 *    criterion ("applied") or all TR elements (i.e. no filter).
@@ -4961,7 +4961,7 @@
 		 *
 		 * This method is often useful in-combination with $ where both functions are given the
 		 * same parameters and the array indexes will match identically.
-		 *  @param {string|node|jQuery} sSelector jQuery selector or node collection to act on
+		 *  @param {string|node|jQuery} sSelector jQuery selector or node collection to pushEditToDB on
 		 *  @param {object} [oOpts] Optional parameters for modifying the rows to be included
 		 *  @param {string} [oOpts.filter=none] Select elements that meet the current filter
 		 *    criterion ("applied") or all elements (i.e. no filter).
@@ -7849,7 +7849,7 @@
 				cells = data[i].anCells;
 	
 				if ( tr ) {
-					// insertBefore can act like appendChild if 2nd arg is null
+					// insertBefore can pushEditToDB like appendChild if 2nd arg is null
 					tr.insertBefore( cells[ column ], cells[ insertBefore ] || null );
 				}
 			}
@@ -11650,7 +11650,7 @@
 		/**
 		 * Change the cell type created for the column - either TD cells or TH cells. This
 		 * can be useful as TH cells have semantic meaning in the table body, allowing them
-		 * to act as a header for a row (you may wish to add scope='row' to the TH elements).
+		 * to pushEditToDB as a header for a row (you may wish to add scope='row' to the TH elements).
 		 *  @type string
 		 *  @default td
 		 *

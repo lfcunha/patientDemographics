@@ -28,8 +28,70 @@
         {% embed "navbar.twig" %}
         {%  endembed %}
 
-        {% block main %}
-        {% endblock %}
+
+        <div class="container" style="width:100%">
+            <div class="row" style="width:100%">
+                <div class="col-md-4" style="width:1%"></div>
+                <div class="col-md-4" style="width:98%">
+                    <div style="text-align:center; background-color: #00ff00; color:#000066">{{ flash['success'] }}</div></br>
+                    <div id="isolatesTable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                        <div class="col-xs-6">
+                            <div class="dataTables_length" id="tableLength">
+                                <label>Show
+                                    <select name="tableLength" id="tableLength" aria-controls="isolatesTable" class="form-control input-sm">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                        <option value="250">250</option>
+                                        <option value="500">500</option>
+                                    </select> entries
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div id="dataTables_filter" class="dataTables_filter">
+                                <label>Quick Search:<input type="search" role="search" id="quickSearch" class="form-control input-sm" placeholder="" aria-controls="isolatesTable" ><i class="fa fa-search fa-3" id="faAvancedSearch"></i>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-12" id="table" style="margin:0px;"> <!--Luis-->
+
+            <!--embed the table -->
+                            {% block table %}
+                            {% endblock %}
+
+
+                        </div> <!--table-->
+                        <!--<button type="button" class="btn btn-primary" style="float:right" onClick="window.location.replace(&quot;/isolatesFull&quot;)">Show all data fields</button>-->
+                    </div> <!--wrapper-->
+                    <div class="col-xs-12 paginationWrapper" style="padding-left:15px">
+                        <!--javascript will set pagination here -->
+                        <ul class="pagination" id="pagination" style="margin:5px; float:left; font-size:12px">
+                        </ul>
+                        <ul class="export" style="margin:0px; float:left; margin-top: 7px; padding-left: 15px;">
+                            <form action="exportPatients" method="post">
+                                <input type="hidden" class = "customButton" id="submitExportSampleIds" name="sampleIds_" value="" />
+                                <span><button id="export" style="margin-right:10px; color:#428bca; margin-top:-1px" class="btn btn-sm btn-default" />Export all</span>
+                            </form>
+                        </ul>
+
+        <!--Add custom buttons -->
+                        {% block customButtons %}
+                        {%  endblock %}
+
+
+                        <div id="paginationInfo"></div>
+                    </div>
+
+                </div> <!--md-4 90%-->
+                <div class="col-md-4" style="width:1%"></div>
+            </div> <!--row-->
+        </div> <!--container-->
+
+
+
+
 
 
 
@@ -38,6 +100,7 @@
             <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
             <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
             <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
+            <script src="public/assets/js/pagination.js"></script>
         {% endblock %}
 
 

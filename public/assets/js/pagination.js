@@ -2,40 +2,77 @@
  * Created by luis on 9/2/14.
  */
 
-//configure REST URLs
 
-var url=_.last(document.URL.split("/"));
-var url_ =_.last(document.URL.split("/"));
+var url=_.last(document.URL.split("/")).replace(/\#/g,'');
 var searchUrl='search';
+
+function pushEditToDB(elem){
+    var value= elem.value;
+    var column = $(elem).parent().attr("name");
+    var id= $(elem).parent().attr("id");
+
+    $.ajax({
+        type: "put",
+        url: url,
+        crossDomain: true,
+        data: {val:value, col:column, id:id},
+        success: function(response) {
+            if (response==1||response=="true" ||response==true){
+                console.log("ok - saved to db");
+                $(elem).parent().html(elem.value);
+                $(elem).parent().css("border", "solid 1px #0f0");
+            }
+            else if (response==2) {
+                //database error
+            }
+            else{
+                //failed to pass validation
+                $(elem).css("border-color", "#f00");
+                var a='';
+                for (x in response){
+                    a=a+response[x];
+                }
+                console.log(a);
+                $(elem).parent().html(a);
+            }
+
+        } ,
+        error: function(request, status, error) {
+            console.log('error');
+            console.error(error);
+        },
+        dataType: "text json"
+    });
+};
+
+
+function generateEditInput(elem,name){
+    var str='<input type="text" class="editField" value="'+name+'">';
+    $(elem).html(str)
+    $(elem).children().focus();$(elem).children().css('width',$(elem).width());
+}
 
 $(document).ready(function(){
     var pages;
-
     $("#tableLength").on("change", function(){getRepaginationData();})
     $("#faAvancedSearch").on("click", function(){quickSearch();})
+    //Reset the search when click "clear" button inside search box
+    $('#quickSearch').on("click", function(){setTimeout(function(){eraseSearch()}, 100);})
+    $('#quickSearch').on('keypress', function(e) {if(e.keyCode==13){quickSearch();}})
     $("#checkbox").on("click", function(){activateTableSelections();})
+    $("#checkbox").on("change", function(){checkedRows(this);})
 
     if (navigator.userAgent.search("Firefox") >= 0) {
-        console.log(1);
+        console.log("firefox");
         $("#dataTables_filter").html('<div id="dataTables_filter" class="dataTables_filter"> <label>Quick Search:<div class="input-group"><input type="search" role="search" id="quickSearch" class="form-control input-sm" placeholder="" aria-controls="isolatesTable" ><span class="input-group-addon" onclick="$(&#39;#quickSearch&#39;).val(&#39;&#39;);eraseSearch()"> x</span></div><i class="fa fa-search fa-3" id="faAvancedSearch" onclick="quickSearch()" style="margin-left:5px"></i></label></div>');
     };
 
-    $('#quickSearch').on('keypress', function(e) {
-        if(e.keyCode==13){
-            quickSearch();
-        }
-    });
 
-    $('td').delegate('#editField', 'keypress', function(e) {
-        if(e.keyCode==13){
-            act(this);
-        }
-    });
-
-    //Reset the search when click "clear" button inside search box
-    $('#quickSearch').on("click", function(){
-        setTimeout(function(){eraseSearch()}, 100);
-    })
+    //push cell edits to the database, both on enter key, or clicking outside element
+    $('td').delegate('.editField', 'keypress', function(e) {if(e.keyCode==13){pushEditToDB(this);}});
+    $('td').delegate('.editField', 'blur', function(e) {pushEditToDB(this);});
+    $("tbody").delegate("td.crosshair", "dblclick", function(){generateEditInput(this,$(this).html())});
+    $("tbody").delegate("td.getMore", "click", function(){getMore($(this).parent().attr('id'))});
 
     function eraseSearch(){
         if( $('#quickSearch').val().length<1){
@@ -62,17 +99,21 @@ function checkedRows(elem){
     if(self.checked) {
         if (index<0) {
             checkedRowsSet.push(self.id)
-
         }
     }
     else {
         if (index>-1) checkedRowsSet.splice(index, 1);
-        if($("#all").is(":checked")) $("#all").prop("checked", false);
+        var Allindex = checkedRowsSet.indexOf("all");
+        if($("#all").is(":checked")) {$("#all").prop("checked", false);checkedRowsSet.splice(Allindex, 1)};
     }
     var values_ = checkedRowsSet.join();
-    $("#submitAddExtractSampleIds").val(values_);
-    $("#submitExportSampleIds").val(values_);
-    //$("#submitGetExtractSampleIds").val(values_);
+    $(".customButton").each(function(e, v){$(v).val(values_)});
+    if (checkedRowsSet.length==0){
+        $("#export").html("Export all");
+    }
+    else {
+        $("#export").html("Export selected");
+    }
 }
 
 
@@ -96,9 +137,6 @@ function activateTableSelections(){
             var values_ = checkedRowsSet.join();
             button1.val(values_);
             button2.val(values_);
-            //$("#submitGetExtractSampleIds").val(values_);
-            // console.log($("#submitAddExtractSampleIds").val())
-            // console.log(checkedRowsSet.join())
         }
         //add a listener for future clicks
         $("#all").on("click", function(){
@@ -131,13 +169,10 @@ function activateTableSelections(){
 }
 
 function setCheckboxes(){
-    console.log("setCheckboxes()");
     $(":checkbox").each(function(e,v){
         var index =checkedRowsSet.indexOf(v.id);
         if (index>-1) {
-            console.log(v.id);
             var _id= "#"+v.id + ".checkbox";
-            console.log(_id);
             $(_id).prop("checked", "true")
         }
     })
@@ -148,7 +183,6 @@ function setCheckboxes(){
             if(!$(v).is(":checked")) {
                 a=0;
             }}})
-
     if (a==1){
         $("#all").prop('checked', true);
     }
@@ -239,7 +273,6 @@ function setButtons(pages, records){
             $('.previous').removeClass('disabled');
         }
         var active=$(".active");
-
         if ($(active).attr('tabindex')==pages-1) {
             $('.next').addClass("disabled"); //if at end of list, disable this "next" button
         }
@@ -265,15 +298,11 @@ function setButtons(pages, records){
                 //console.log("5_2");
                 elipsis0 = $('#isolatesTable_ellipsis').clone(true);
                 $(second).replaceWith(elipsis0);
-
                 var firstElipsis = $('*.pagination').children().get(2);
                 elipsis0='<li class="paginate_button disabled" aria-controls="isolatesTable" tabindex="-3" id="isolatesTable_ellipsis"><a href="#">...</a></li>';
                 var $elipsis0 = $($.parseHTML(elipsis0));
-
                 $(firstElipsis).replaceWith($elipsis0.clone());
-
                 a=$('.paginate_button');
-
                 for (var i=3; i<a.length-3; i++){
                     $(a[i]).attr("tabindex", parseInt($(a[i]).attr("tabindex")) +1);
                     $(a[i]).children().html(parseInt($(a[i]).children().html())+1);
@@ -376,28 +405,21 @@ function getRepaginationData(elem){
         type: 'get',
         url: url,
         data: {length:tableLength, offset:offset,column: column, order:order.split("_")[1], ajax:1},
-        //data: {id:"1"},
         beforeSend: function(){
-            console.log("searching:");
-            console.log({length:tableLength, offset:offset, column: column, order:order.split("_")[1]});
         },
         success: function (response) {
             var data__ = JSON.parse(response);
-            console.log(data__);
-            //$(".showingPagesInfo").remove();
             preparePagination(data__.count, data__.size);
             tbodyTemplate(data__);
         },
         error: function() {
             console.error("error");
-            // alert('Not working!');
         }
     });
 }
 
 function sortByColumn(elem){
-    var order;
-    //if ($(elem).html()=="Select" || $(elem).html()=="Details") return 0;
+    var order;;
     var sortClass=$(elem).attr("class");
     if (sortClass=="sorting" || sortClass == "sort sorting_desc") {
         order="sorting_asc";
@@ -414,7 +436,6 @@ function sortByColumn(elem){
         getRepaginationData(elem);
     }
     else {
-        //  console.log("sbc_qs")
         quickSearch();
     }
 }
@@ -422,8 +443,6 @@ function sortByColumn(elem){
 function quickSearch(offset,source){
     var column;
     var order;
-    // console.log("qs");
-    //$("th").attr("class", "sorting");
 
     if ($(".sort").length>0){
         var elem=$(".sort");
@@ -434,36 +453,27 @@ function quickSearch(offset,source){
         column="id";
         order="sorting_asc";
     }
-
     var searchTerm = $("#quickSearch").val();
     if (searchTerm===""){getRepaginationData(); return 0;}
-    // console.log("bypassed repagination", column, order);
     var tableLength = $("#tableLength").children().children().val();
-    //var offset=tableLength * parseInt($(elem).attr('tabindex'))-tableLength;
     if (!offset){
         offset=0;
     }
     else {
         offset=offset;
     }
-    // console.log("offset: " + offset);
     $.ajax({
         type: 'post',
         url: "search",
-        data: {table: _.last(document.URL.split("/")), length:tableLength, offset:offset, search:searchTerm, column: column, order:order.split("_")[1]},
-        //data: {id:"1"},
+        data: {table: url, length:tableLength, offset:offset, search:searchTerm, column: column, order:order.split("_")[1]},
         beforeSend: function(){
-            console.log("quick search");
-            console.log({length:tableLength, offset:offset, search:searchTerm, column: column, order:order.split("_")[1]});
         },
         success: function (response) {
-            console.log(response);
             var data=JSON.parse(response);
             if (!source) {
                 $(".showingPagesInfo").remove()
                 preparePagination(data.count, data.size);
-                console.log("a :" + data.count);
-            }
+             }
             tbodyTemplate(data);
             setPageInfo(data.size, data.offset, data.count, data.total);
         },
@@ -474,24 +484,19 @@ function quickSearch(offset,source){
 }
 
 function navigatePagination(elem, tag){
-    //console.log("getData() tabindex: " + $(elem).attr("tabindex"));
     var elipsis0='<li class="paginate_button disabled" aria-controls="isolatesTable" tabindex="-3" id="isolatesTable_ellipsis"><a href="#">...</a></li>';
     var elipsis1='<li class="paginate_button disabled" aria-controls="isolatesTable" tabindex="-2" id="isolatesTable_ellipsis"><a href="#">...</a></li>';
-    //var el='<li class="paginate_button" aria-controls="isolatesTable" tabindex="3" onclick="getData(this);return 0;"><a href="#"></a></li>';
     var ind=$(elem).attr("tabindex");
     if (pages>1){
         if(ind==pages){
-            // console.log("00");
             $(".next").addClass("disabled");
             $(".previous").removeClass("disabled");
         }
         else if(ind==1){
-            // console.log("11");
             $(".previous").addClass("disabled");
             $(".next").removeClass("disabled");
         }
         else {
-            // console.log("12");
             $(".previous").removeClass("disabled");
             $(".next").removeClass("disabled");
         }
@@ -613,18 +618,14 @@ function getData(elem, tag) {
                 console.log("a");
             },
             success: function (response) {
-                console.log("gotdata");
                 var data=JSON.parse(response);
-                console.log(data.offset);
                 pages=Math.ceil(data.count/data.size);
                 if ($($('*.pagination').children().get(-2)).attr('tabindex')!=pages && pages>0){
                     $($('*.pagination').children().get(-2)).attr('tabindex', pages);
                     $($('*.pagination').children().get(-2)).children().html(pages);
                 }
-
                 tbodyTemplate(data);
                 setPageInfo(data.size, data.offset, data.count, data.total);
-                //setCheckboxes(); //function is in tableAjax.js
             },
             error: function() {
                 console.error("error");
@@ -634,121 +635,11 @@ function getData(elem, tag) {
 } //getData()
 
 
-var checkedRowsSet=new Array();
-function checkedRows(elem){
-    self=elem;
-    var index = checkedRowsSet.indexOf(self.id);
-    if(self.checked) {
-        if (index<0) {
-            checkedRowsSet.push(self.id)
-
-        }
-    }
-    else {
-        if (index>-1) checkedRowsSet.splice(index, 1);
-        var Allindex = checkedRowsSet.indexOf("all");
-        if($("#all").is(":checked")) {
-            $("#all").prop("checked", false);
-            checkedRowsSet.splice(Allindex, 1);
-        }
-    }
-    var values_ = checkedRowsSet.join();
-    $("#submitAddExtractSampleIds").val(values_);
-    $("#submitExportSampleIds").val(values_);
-    //$("#submitGetExtractSampleIds").val(values_);
-    if (checkedRowsSet.length==0){
-        $("#ExportIsolatesButton").html("Export all");
-    }
-    else {
-        $("#ExportIsolatesButton").html("Export selected");
-    }
-
-}
 
 
-//checkboxes
-var all=0;
-function activateTableSelections(){
-    var button1=$("#submitAddExtractSampleIds");
-    var button2=$("#submitExportSampleIds");
-    if (all==0){
-        //this is the first time "all" is clicked, so do add all to the checkedRowsSet array
-        $(":checkbox").parent().parent().children().find(":checkbox").prop('checked', true);
 
-        if($("#all").is(":checked")) {
-            $("#ExportIsolatesButton").html("Export selected");
-            $(":checkbox").prop('checked', true)
-            $(":checkbox").each(function(e,v){
-                var index = checkedRowsSet.indexOf(v.id);
-                if (index<0) {
-                    checkedRowsSet.push(v.id)
-                }
-            })
-            var values_ = checkedRowsSet.join();
-            button1.val(values_);
-            button2.val(values_);
-            //$("#submitGetExtractSampleIds").val(values_);
-            // console.log($("#submitAddExtractSampleIds").val())
-            // console.log(checkedRowsSet.join())
-        }
-        //add a listener for future clicks
-        $("#all").on("click", function(){
-            if($("#all").is(":checked")) {
-                $("#ExportIsolatesButton").html("Export selected");
-                $(":checkbox").prop('checked', true)
-                $(":checkbox").each(function(e,v){
-                    var index = checkedRowsSet.indexOf(v.id);
-                    if (index<0) {
-                        checkedRowsSet.push(v.id)
-                    }
-                })
-                button1.val(checkedRowsSet.join());
-                button2.val(checkedRowsSet.join());
-                //$("#submitGetExtractSampleIds").val(checkedRowsSet.join());
-            }
-            else {
-                //$(":checkbox").parent().parent().children().find(".checkbox").prop('checked', false)
-                $("#ExportIsolatesButton").html("Export all");
-                $(":checkbox").prop('checked', false)
-                $(":checkbox").each(function(e,v){
-                    var index = checkedRowsSet.indexOf(v.id);
-                    if (index>-1) checkedRowsSet.splice(index, 1);
-                })
-                button1.val(checkedRowsSet.join());
-                button2.val(checkedRowsSet.join());
-                //$("#submitGetExtractSampleIds").val(checkedRowsSet.join());
-            }
-        });
-    }
-    all=1;
-}
 
-function setCheckboxes(){
-    console.log("setCheckboxes()");
-    $(":checkbox").each(function(e,v){
-        var index =checkedRowsSet.indexOf(v.id);
-        if (index>-1) {
-            console.log(v.id);
-            var _id= "#"+v.id + ".checkbox";
-            console.log(_id);
-            $(_id).prop("checked", "true")
-        }
-    })
-    var a=1;
-    $(":checkbox").each(function(e,v){
-        //console.log(e,v);
-        if(v.id!="all"){
-            if(!$(v).is(":checked")) {
-                a=0;
-            }}})
 
-    if (a==1){
-        $("#all").prop('checked', true);
-    }
-    else {
-        $("#all").prop('checked', false);
-    }
-}
 
 function test(){
     return 1;

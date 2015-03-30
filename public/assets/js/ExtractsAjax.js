@@ -11,7 +11,7 @@ $(document).ready(function(){
 
     $('td').delegate('#editField', 'keypress', function(e) {
         if(e.keyCode==13){
-            act(this);
+            pushEditToDB(this);
             console.log(2);
         }
     });
@@ -302,10 +302,10 @@ function tbodyIsolatesTemplate(data){
         }
 
         var url=document.URL;
-        var editStatus='ondblclick="$(this).html(&#39;<select onchange=&quot;setStatusMulti(this)&quot; onblur=&quot;act(this)&quot; class=&quot;form-control&quot;><option value=&quot;Data entered&quot;>Data entered</option><option value=&quot;Samples received&quot;>Samples received</option><option value=&quot;Library prep&quot;>Library prep</option><option value=&quot;Sequencing&quot;>Sequencing</option><option value=&quot;Run complete&quot;>Run complete</option><option value=&quot;Complete&quot;>Complete</option><option value=&quot;Partial&quot;>Partial</option><option value=&quot;Insufficient cDNA&quot;>Insufficient cDNA</option><option value=&quot;Failed QC&quot;>Failed QC</option><option value=&quot;Failed prep&quot;>Failed prep</option></select>&#39;); $(this).children().focus();$(this).children().css(&#39;width&#39;,$(this).width())"';
-        var MeasumentType='ondblclick="$(this).html(&#39;<select onblur=&quot;act(this)&quot; class=&quot;form-control&quot;><option value=&quot;Qbit&quot;>Qbit</option><option value=&quot;Qbit&quot;>Qbit</option><option value=&quot;Nanodrop&quot;>Nanodrop</option><option value=&quot;Spec&quot;>Spec</option><option value=&quot;Other&quot;>Other</option></select>&#39;);$(this).children().focus();$(this).children().css(&#39;width&#39;,$(this).width())"';
-        var ChimericSegments='ondblclick="$(this).html(&#39;<select onblur=&quot;act(this)&quot; class=&quot;form-control&quot;><option value=&quot;Yes&quot;>Yes</option><option value=&quot;Yes&quot;>Yes</option><option value=&quot;No&quot;>No</option></select>&#39;); $(this).children().focus();$(this).children().css(&#39;width&#39;,$(this).width())"';
-        var CostSite='ondblclick="$(this).html(&#39;<select onblur=&quot;act(this)&quot; class=&quot;form-control&quot;><option value=&quot;crip&quot;>crip</option><option value=&quot;CRIP&quot;>CRIP</option><option value=&quot;Invoice&quot;>Invoice</option></select>&#39;);$(this).children().focus();$(this).children().css(&#39;width&#39;,$(this).width())"';
+        var editStatus='ondblclick="$(this).html(&#39;<select onchange=&quot;setStatusMulti(this)&quot; onblur=&quot;pushEditToDB(this)&quot; class=&quot;form-control&quot;><option value=&quot;Data entered&quot;>Data entered</option><option value=&quot;Samples received&quot;>Samples received</option><option value=&quot;Library prep&quot;>Library prep</option><option value=&quot;Sequencing&quot;>Sequencing</option><option value=&quot;Run complete&quot;>Run complete</option><option value=&quot;Complete&quot;>Complete</option><option value=&quot;Partial&quot;>Partial</option><option value=&quot;Insufficient cDNA&quot;>Insufficient cDNA</option><option value=&quot;Failed QC&quot;>Failed QC</option><option value=&quot;Failed prep&quot;>Failed prep</option></select>&#39;); $(this).children().focus();$(this).children().css(&#39;width&#39;,$(this).width())"';
+        var MeasumentType='ondblclick="$(this).html(&#39;<select onblur=&quot;pushEditToDB(this)&quot; class=&quot;form-control&quot;><option value=&quot;Qbit&quot;>Qbit</option><option value=&quot;Qbit&quot;>Qbit</option><option value=&quot;Nanodrop&quot;>Nanodrop</option><option value=&quot;Spec&quot;>Spec</option><option value=&quot;Other&quot;>Other</option></select>&#39;);$(this).children().focus();$(this).children().css(&#39;width&#39;,$(this).width())"';
+        var ChimericSegments='ondblclick="$(this).html(&#39;<select onblur=&quot;pushEditToDB(this)&quot; class=&quot;form-control&quot;><option value=&quot;Yes&quot;>Yes</option><option value=&quot;Yes&quot;>Yes</option><option value=&quot;No&quot;>No</option></select>&#39;); $(this).children().focus();$(this).children().css(&#39;width&#39;,$(this).width())"';
+        var CostSite='ondblclick="$(this).html(&#39;<select onblur=&quot;pushEditToDB(this)&quot; class=&quot;form-control&quot;><option value=&quot;crip&quot;>crip</option><option value=&quot;CRIP&quot;>CRIP</option><option value=&quot;Invoice&quot;>Invoice</option></select>&#39;);$(this).children().focus();$(this).children().css(&#39;width&#39;,$(this).width())"';
 
 
             var td='<td ><input id="'+ row.idExtract +'" class="checkbox" type="checkbox" onchange="checkedRows(this)"></td>';
@@ -855,7 +855,7 @@ function setStatusMulti(elem){
             name:elem.attr("name"),
             id:elem.attr("id")
         }
-        act(elem, data);
+        pushEditToDB(elem, data);
 
         //console.log("Val: " + value);
 

@@ -88,7 +88,7 @@ function act(elem){
             console.log(JSON.stringify(response));
             if (response==1||response=="true" ||response==true){
                 //ajax call to a function to update database
-                console.log("ok - saved to db (DNA.js::act())");
+                console.log("ok - saved to db (DNA.js::pushEditToDB())");
                 $(elem).parent().html(elem.value);
                 $(elem).parent().css("border", "solid 1px #0f0");
             }
@@ -118,7 +118,7 @@ function act(elem){
 
 
 function generateEditInput(elem,name){
-    var str='<input type="text" id="editField" value="'+name+'" onblur="act(this)">';
+    var str='<input type="text" id="editField" value="'+name+'" onblur="pushEditToDB(this)">';
     $(elem).html(str)
     $(elem).children().focus();$(elem).children().css('width',$(elem).width());
 }

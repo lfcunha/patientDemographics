@@ -31,9 +31,9 @@ $authenticate = function ($app) {
 
 
 $app->get('/', $authenticate($app), function() use ($app){
-    $env = $app->environment();
-    $salt=$env['salt'];
-    $app->render('home.twig', array("user"=>$_SESSION['user']));
+    $c= new homeController();
+    $c->show();
+
 });
 
 $app->get('/login', function()  use ($app){

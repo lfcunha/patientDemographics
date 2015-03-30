@@ -55,7 +55,7 @@ function act(elem, source){
 
 function generateEditInput(elem,name){
 
-    var str='<input type="text" id="#editField" value="'+name+'" onblur="act(this)">';
+    var str='<input type="text" id="#editField" value="'+name+'" onblur="pushEditToDB(this)">';
 
     $(elem).html(str)
     $(elem).children().focus();$(elem).children().css('width',$(elem).width());

@@ -1,5 +1,16 @@
 {% extends "basehtml.twig" %}
 
+{% block head %}
+    {{ parent() }}
+    <style>
+
+        .table td {
+            text-align: left;
+        }
+    </style>
+
+{% endblock %}
+
 
 {% block main %}
 
@@ -8,8 +19,55 @@
         <div class="col-md-4"></div>
         <div class="col-md-4" style="text-align:center">
 
-             {{ user }}
 
+            <fieldset style="margin:0 20px; width:300px">
+                <legend>Patients/Doctor</legend>
+            <table class="table table-condensed">
+            <tr><th>doc</th><th>count</th></tr>
+            {% for item in docCount  %}
+                <tr>
+                    <td>{{ item["doc"] }} </td> <td> {{  item["count"] }}</td>
+                </tr>
+            {%  endfor %}
+            </table>
+            </fieldset>
+
+            <fieldset style="margin:0 20px; width:300px">
+                <legend>Patients/Institution</legend>
+                <table class="table table-condensed">
+                    <tr><th>Institution</th><th>count</th></tr>
+                    {% for item in Institution  %}
+                        <tr>
+                            <td>{{ item["Institution"] }} </td> <td> {{  item["count"] }}</td>
+                        </tr>
+                    {%  endfor %}
+                </table>
+            </fieldset>
+
+            <fieldset style="margin:0 20px; width:300px">
+                <legend>Proband/Institution</legend>
+                <table class="table table-condensed">
+                    <tr><th>Institution</th><th>count</th></tr>
+                    {% for item in probandInst  %}
+                        <tr>
+                            <td>{{ item["Institution"] }} </td> <td> {{  item["count"] }}</td>
+                        </tr>
+                    {%  endfor %}
+                </table>
+            </fieldset>
+
+
+            <fieldset style="margin:0 20px; width:300px">
+                <legend>Proband/doc</legend>
+                <table class="table table-condensed">
+                    <tr><th>Doc</th><th>count</th></tr>
+                    {% for item in probandDoc  %}
+                        <tr>
+                            <td>{{ item["doc"] }} </td> <td> {{  item["count"] }}</td>
+                        </tr>
+                    {%  endfor %}
+                </table>
+            </fieldset>
 
 
 

@@ -3,10 +3,13 @@
 {% block head %}
     {{ parent() }}
 
+    <!--
+        include the handlebars template here
+    -->
 
     <script id="individualsTable-template" type="text/x-handlebars-template">
         {% verbatim %}
-            <td><input id="{{id}}" class="checkbox" type="checkbox" onchange="checkedRows(this)"></td>
+            <td><input id="{{id}}" class="checkbox" type="checkbox"></td>
             <td id={{id}} class="" name="id" >{{id}}</td>
             <td id={{id}} class="" name="referralDate" >{{referralDate}}</td>
             <td id={{id}} class="crosshair" name="referralComments" >{{referralComments}}</td>
@@ -46,46 +49,16 @@
         {% endverbatim %}
     </script>
 
-
 {% endblock %}
 
 
-{% block main %}
-    <div class="container" style="width:100%">
-        <div class="row" style="width:100%">
-            <div class="col-md-4" style="width:1%"></div>
-            <div class="col-md-4" style="width:98%">
+{% block table %}
+<!--  define the table here  -->
 
-                <div style="text-align:center; background-color: #00ff00; color:#000066">{{ flash['success'] }}</div></br>
-
-                <div id="isolatesTable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-
-                    <div class="col-xs-6">
-                        <div class="dataTables_length" id="tableLength">
-                            <label>Show
-                                <select name="tableLength" id="tableLength" aria-controls="isolatesTable" class="form-control input-sm">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                    <option value="250">250</option>
-                                    <option value="500">500</option>
-                                </select> entries
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div id="dataTables_filter" class="dataTables_filter">
-                            <label>Quick Search:<input type="search" role="search" id="quickSearch" class="form-control input-sm" placeholder="" aria-controls="isolatesTable" ><i class="fa fa-search fa-3" id="faAvancedSearch"></i>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-xs-12" id="table" style="margin:0px;"> <!--Luis-->
-
-                        <table id="individualsTable" class="table table-hover dataTable table-bordered tablesorter" cellspacing="0"  style="margin-top:5px;width:100%">
+                        <table id="patientsTable" class="table table-hover dataTable table-bordered tablesorter" cellspacing="0"  style="margin-top:5px;width:100%">
                             <thead>
                                 <tr>
-                                    <th id="checkbox" style="width:10px!important;"><input id="all" type="checkbox" onclick="activateTableSelections();return 0;"/></th>
+                                    <th id="checkbox" style="width:10px!important;"><input id="all" type="checkbox" /></th>
                                     <th class="sorting" name="id" >id</th>
                                     <th class="sorting" name="referralDate" >referral date</th>
                                     <th class="sorting" name="referralComments" >referral comments</th>
@@ -168,11 +141,9 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-
-
                             {% for item in data['data']  %}
                                 <tr id={{item.id}}>
-                                    <td><input id="{{item.id}}" class="checkbox" type="checkbox"  onchange="checkedRows(this)"></td>
+                                    <td><input id="{{item.id}}" class="checkbox" type="checkbox"></td>
                                     <td class="" name="id" >{{item.id}}</td>
                                     <td class="" name="referralDate" >{{item.referralDate}}</td>
                                     <td class="crosshair" name="referralComments" >{{item.referralComments}}</td>
@@ -201,56 +172,36 @@
                                     <td class="" name="doctor">{{item.doctor}}</td>
                                     <td class="" name="office">{{item.office}}</td>
                                     <td class="" name="patientId" >{{item.patientId}}</td>
-
                                     <td class="" name="familyId" >{{item.familyId}}</td>
                                     <td class="" name="familyIndividualId" >{{ item.familyIndividualId}}</td>
                                     <td class="crosshair" name="fatherId">{{item.fatherId}}</td>
                                     <td class="crosshair" name="motherId">{{item.motherId}}</td>
                                     <td class="crosshair" name="doc">{{item.doc}}</td>
                                     <td class="crosshair" name="Institution">{{item.Institution}}</td>
-
                                     <td class="" name="created">{{item.created}}</td>
                                     <td class="" name="modified" >{{item.modified}}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
                         </table>
-                    </div> <!--table-->
-                    <!--<button type="button" class="btn btn-primary" style="float:right" onClick="window.location.replace(&quot;/isolatesFull&quot;)">Show all data fields</button>-->
-                </div> <!--wrapper-->
-                <div class="col-xs-12 paginationWrapper" style="padding-left:15px">
-                    <!--javascript will set pagination here -->
-                    <ul class="pagination" id="pagination" style="margin:5px; float:left; font-size:12px">
-                    </ul>
-                    <ul class="export" style="margin:0px; float:left; margin-top: 7px; padding-left: 15px;">
-                        <form action="exportPatients" method="post">
-                            <input type="hidden" id="submitExportSampleIds" name="sampleIds_" value="" />
-                            <span><button style="margin-right:10px; color:#428bca; margin-top:-1px" class="btn btn-sm btn-default" />Export</span>
-                        </form>
-                    </ul>
-                    <ul class="export" style="margin:0px; float:left; margin-top: 7px; padding-left: 15px;">
-                        <form action="generatePnumber" method="post">
-                            <input type="hidden" id="submitAddExtractSampleIds" name="patientIds_" value="" />
-                            <span><button style="margin-right:10px; color:#428bca; margin-top:-1px" class="btn btn-sm btn-default" />Generate P# (sample id)</span>
-                        </form>
-                    </ul>
-                    <div id="paginationInfo"></div>
-                </div>
-
-            </div> <!--md-4 90%-->
-            <div class="col-md-4" style="width:1%"></div>
-        </div> <!--row-->
-    </div> <!--container-->
-
-
-
-
 
 {% endblock %}
 
+{% block customButtons %}
+    <!-- add custom buttons to table
+        follow the template below
+        input must be of class customButton
+    -->
+                            <ul class="export" style="margin:0px; float:left; margin-top: 7px; padding-left: 15px;">
+                                <form action="generatePnumber" method="post">
+                                    <input type="hidden" class = "customButton" id="submitAddExtractSampleIds" name="patientIds_" value="" />
+                                    <span><button style="margin-right:10px; color:#428bca; margin-top:-1px" class="btn btn-sm btn-default" />Generate P# (sample id)</span>
+                                </form>
+                            </ul>
+{%  endblock %}
+
+
 {% block scripts %}
     {{ parent() }}
-
-    <script src="public/assets/js/pagination.js"></script>
-    <script src="public/assets/js/patients.js"></script>
+    <!-- add any scripts here -->
 {% endblock %}
