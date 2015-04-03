@@ -6,6 +6,8 @@
  * Time: 12:28 PM
  */
 
+require_once "config.php";
+require ROOT."/app/config/dbparams.php";
 
 $config['cookies'] = array(
     'expires'       => '20 minutes',
@@ -14,7 +16,7 @@ $config['cookies'] = array(
     'secure'        => false,
     'httponly'      => false,
     'name'          => 'slim_session',
-    'secret'        => 'MWqUDk8jUJHfFv04hTwbuzL0',
+    'secret'        => $opts['cookieSecret'],
     'cipher'        => MCRYPT_RIJNDAEL_256,
     'cipher_mode'   => MCRYPT_MODE_CBC
 );
