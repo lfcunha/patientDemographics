@@ -2,11 +2,8 @@
 
 use \individuals;
 
-#ini_set('memory_limit', '512M');
-//include_once "./app/controllers/doctorController.php";
 
 ChromePhp::log("");
-
 
 $authenticate = function ($app) {
 
@@ -25,7 +22,6 @@ $authenticate = function ($app) {
             $app->flash('error', 'Login required');
             $app->redirect('/demographicsDB/login');
         }
-
     };
 };
 
@@ -41,9 +37,7 @@ $app->get('/login', function()  use ($app){
 });
 
 
-
 $app->post('/login', function() use ($app){
-
     $req = $app->request();
     $logininfo=$req->post();
     $env = $app->environment();
@@ -193,81 +187,84 @@ $app->post('/readExcel', $authenticate($app), function()  use ($app) {
 });
 
 
+$app->group('/patients', $authenticate($app), function () use ($app) {
 
-
-$app->get('/patients',  $authenticate($app), function()  use ($app){
-    $c      = new patientController();
-    $ajax   = $app->request()->get('ajax')?$app->request()->get('ajax'):0;
-    $length = $app->request()->get('length')?$app->request()->get('length'):10;
-    $offset = $app->request()->get('offset')?$app->request()->get('offset'):0;
-    $column = $app->request()->get('column')?$app->request()->get('column'):"id";
-    $order  = $app->request()->get('order')? $app->request()->get('order'):"asc";
-    $data   =  $c->getPatients($column, $order, $offset, $length, $ajax);
-    echo $data;
-
-
-    #$app->render('patientsView.twig', array("table"=>"patient"));
+    $app->get('/',   function()  use ($app){
+        $c      = new patientController();
+        $ajax   = $app->request()->get('ajax')?$app->request()->get('ajax'):0;
+        $length = $app->request()->get('length')?$app->request()->get('length'):10;
+        $offset = $app->request()->get('offset')?$app->request()->get('offset'):0;
+        $column = $app->request()->get('column')?$app->request()->get('column'):"id";
+        $order  = $app->request()->get('order')? $app->request()->get('order'):"asc";
+        $data   =  $c->getPatients($column, $order, $offset, $length, $ajax);
+        echo $data;
+    });
+    $app->post('/',   function()  use ($app){
+        echo "1";
+    });
+    $app->put('/',   function()  use ($app){
+        $req = $app->request();
+        $value=$req->put("val");
+        $col=$req->put("col");
+        $id=$req->put("id");
+        if($value=="")$value=NULL;
+        $c= new patientController();
+        $result=$c->editPatient(array("column"=>$col,"value"=>$value,"id"=>$id));
+        echo(json_encode($result));
+        //echo 1;
+    });
 });
 
 $app->get('/addpatients', $authenticate($app),  function()  use ($app){
     #echo "hello";
     $app->render('upload.twig', array("table"=>"patient"));
 });
-$app->post('/patients', $authenticate($app),  function()  use ($app){
-    echo "1";
-});
-$app->put('/patients', $authenticate($app),  function()  use ($app){
-    $req = $app->request();
-    $value=$req->put("val");
-    $col=$req->put("col");
-    $id=$req->put("id");
-    if($value=="")$value=NULL;
-    $c= new patientController();
-    $result=$c->editPatient(array("column"=>$col,"value"=>$value,"id"=>$id));
-    echo(json_encode($result));
-    //echo 1;
-});
+
 $app->delete('/individual', $authenticate($app),  function()  use ($app){
 });
 
 
 
 
-$app->get('/doctor',  $authenticate($app), function()  use ($app){
-    $ajax = $app->request()->get('ajax');
-    $length = $app->request()->get('length')?$app->request()->get('length'):10;
-    $offset = $app->request()->get('offset')?$app->request()->get('offset'):0;
-    $column=$app->request()->get('column')?$app->request()->get('column'):"id";
-    $order= $app->request()->get('order')? $app->request()->get('order'):"asc";
-    $opts=array($column, $order, $offset, $length, $ajax);
-    $c= new doctorController();
-    $data=$c->getDoctor($column, $order, $offset, $length, $ajax);
-    echo $data;
 
-    //$app->render('doctorView.twig', array("table"=>"DNA"));
-});
 $app->get('/adddoctor', $authenticate($app),  function()  use ($app){
     #echo "1";
     $app->render('addDoctor.twig', array("table"=>"RNA"));
 });
-$app->post('/doctor', $authenticate($app),  function()  use ($app){
-    $req=$app->request();
-    $firstName=$req->post("firstName");
-    $lastName=$req->post("lastName");
-    $office=$req->post("office");
-    $institution=$req->post("institution");
-    $city=$req->post("city");
-    $country=$req->post("country");
-    $c= new doctorController();
-    $data=$c->addDoctor(array("firstName"=>$firstName, "lastName"=>$lastName, "office"=>$office, "institution"=>$institution, "city"=>$city, "country"=>$country));
-    echo json_encode($data);
+
+$app->group('/doctor', $authenticate($app), function () use ($app) {
+    $app->get('/',  function()  use ($app){
+        $ajax = $app->request()->get('ajax');
+        $length = $app->request()->get('length')?$app->request()->get('length'):10;
+        $offset = $app->request()->get('offset')?$app->request()->get('offset'):0;
+        $column=$app->request()->get('column')?$app->request()->get('column'):"id";
+        $order= $app->request()->get('order')? $app->request()->get('order'):"asc";
+        $opts=array($column, $order, $offset, $length, $ajax);
+        $c= new doctorController();
+        $data=$c->getDoctor($column, $order, $offset, $length, $ajax);
+        echo $data;
+
+        //$app->render('doctorView.twig', array("table"=>"DNA"));
+    });
+    $app->post('/',   function()  use ($app){
+        $req=$app->request();
+        $firstName=$req->post("firstName");
+        $lastName=$req->post("lastName");
+        $office=$req->post("office");
+        $institution=$req->post("institution");
+        $city=$req->post("city");
+        $country=$req->post("country");
+        $c= new doctorController();
+        $data=$c->addDoctor(array("firstName"=>$firstName, "lastName"=>$lastName, "office"=>$office, "institution"=>$institution, "city"=>$city, "country"=>$country));
+        echo json_encode($data);
+
+    });
+    $app->put('/',  function()  use ($app){
+    });
+    $app->delete('/',  function()  use ($app){
+    });
 
 });
-$app->put('/doctor', $authenticate($app),  function()  use ($app){
-});
-$app->delete('/doctor', $authenticate($app),  function()  use ($app){
-});
-
 
 $app->get('/family',  $authenticate($app), function()  use ($app){
     $ajax = $app->request()->get('ajax');

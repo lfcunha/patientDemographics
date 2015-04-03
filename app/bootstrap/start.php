@@ -29,7 +29,6 @@ $config = array(
 
 #load database and slim configuration files
 foreach (glob(APP_PATH.'config/*.php') as $configFile) {
-
     require $configFile;
 }
 
@@ -43,13 +42,10 @@ if(isset($config['cookies'])){
 
 $app = new \Slim\Slim($config['slim']);   #set template directory and twig
 
-//$response = $app->response();
-//$response->header('Access-Control-Allow-Origin', '*');
 $app->response->header('Expires: Thu, 15 Apr 2016 20:00:00 GMT');
-//$response->write(json_encode($data));
 $app->response->headers->set('Access-Control-Allow-Origin', '*');
 $app->add(new \Slim\Middleware\SessionCookie($config['cookies']));
-$app->config('debug', true);    //change to false in production
+
 
 $app->notFound(function () use ($app) {
     $app->render('notFound.twig');
@@ -61,33 +57,14 @@ $env['salt'] = $config['database']['connections']['salt']['salt'];
 $env["dbtables"]=$config["dbtables"];
 $env["rules"]=$config["rules"];
 
-//set twig or mustache: https://github.com/codeguy/Slim-Extras
-
-
-#$app->model = new sampleModel("a");
-#$app->model->sayHello();
-
-
 
 $starter  = new \SlimStarter\Bootstrap($app);
-
 
 $starter->setConfig($config);  #contains database connection info
 
 $starter->boot();
 
 require ROOT_PATH .'./app/routes.php';
-
-
-
-$app->get('/test', function () {
-    echo "Hello";
-});
-
-$app->get('/hello/:name', function ($name) {
-    echo "Hello, $name";
-});
-
 
 
 return $starter;
